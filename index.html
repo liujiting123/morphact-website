@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1762cf">
+  <meta name="description" content="MorphAct: Contextual Parameterization of Vision–Language–Action Models. A shared adaptation rule that generates context-dependent low-rank updates for robot policies.">
+  <meta property="og:title" content="MorphAct — Contextual Parameterization of VLA Models">
+  <meta property="og:description" content="Share an adaptation rule, specialize the updates. Contextual parameter generation for vision–language–action models.">
+  <meta property="og:type" content="website">
+  <title>MorphAct: Contextual Parameterization of Vision–Language–Action Models</title>
+  <link rel="icon" type="image/svg+xml" href="assets/morphact.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#main"><img src="assets/morphact.svg" width="34" height="34" alt="">MorphAct</a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#real-world">Real world</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="paper-title">
+      <p class="eyebrow">Vision · Language · Action</p>
+      <h1 id="paper-title"><span class="wordmark"><img src="assets/morphact.svg" width="100" height="100" alt="">MorphAct</span><span class="paper-subtitle">Contextual Parameterization<br>of Vision–Language–Action Models</span></h1>
+      <p class="hero-description">One shared adaptation rule.<br class="mobile-break"> Parameter updates that change with context.</p>
+      <!-- Add verified authors and affiliations here when ready for publication. -->
+      <div class="resource-links" aria-label="Research resources">
+        <!-- Replace each disabled button with an anchor only when its release URL is available. -->
+        <button class="resource" type="button" disabled aria-label="arXiv paper, coming soon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7zM14 3v5h4M10 12h5M10 16h5"/></svg>
+          <span>arXiv</span><span class="availability">Coming soon</span>
+        </button>
+        <button class="resource" type="button" disabled aria-label="Code repository, coming soon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18"/></svg>
+          <span>Code</span><span class="availability">Coming soon</span>
+        </button>
+      </div>
+      <figure class="teaser">
+        <a href="assets/morphact-teaser.png" target="_blank" rel="noopener" aria-label="Open the MorphAct concept figure at full resolution in a new tab">
+          <img src="assets/morphact-teaser.png" width="2172" height="724" fetchpriority="high" alt="A single manipulation task moves through free-space motion, contact, transport, and precise placement. Static adaptation reuses one update; MorphAct generates different vision-language and action updates for each context. The projected adapter spaces are conceptual illustrations.">
+        </a>
+        <figcaption>One task, changing contexts. <strong>MorphAct lets the policy adapt as the interaction evolves.</strong><span class="figure-note">Conceptual illustration. Operation labels are shown for explanation; the model does not use them.</span></figcaption>
+      </figure>
+      <div class="highlights" aria-label="Selected results reported in the paper">
+        <div><strong>3<span> backbones</span></strong><p>X-VLA, π<sub>0</sub>, and π<sub>0.5</sub></p></div>
+        <div><strong>+15.13<span> pp</span></strong><p>Meta-World average · π<sub>0.5</sub></p></div>
+        <div><strong>+17<span> pp</span></strong><p>Real-world Oreo retrieval · π<sub>0</sub></p></div>
+      </div>
+    </section>
+
+    <section id="overview" class="section wrap overview" aria-labelledby="overview-title">
+      <div class="section-heading"><p class="eyebrow">01 / The idea</p><h2 id="overview-title">Share the rule.<br><span>Specialize the updates.</span></h2></div>
+      <div class="overview-copy">
+        <p class="lead">A robot’s perceptual and control demands change even within a single task. A fixed parameter update has to accommodate them all.</p>
+        <p>MorphAct is a contextual parameterization framework for vision–language–action models. Instead of learning one static update, it learns a shared rule that generates <strong>low-rank parameter updates from the current context</strong>.</p>
+        <p>Two coupled generators adapt the vision–language and action modules. The adapted visual-language representation then guides action-side parameter generation. Both generators learn jointly through the policy’s native action objective, without operation labels or expert-adapter targets.</p>
+      </div>
+    </section>
+
+    <section id="method" class="section method-section" aria-labelledby="method-title">
+      <div class="wrap">
+        <div class="section-heading centered"><p class="eyebrow">02 / How it works</p><h2 id="method-title">From context to parameters to action.</h2><p class="section-intro">Adapt what the policy sees, then use that representation to adapt how it acts.</p></div>
+        <figure class="method-figure">
+          <a href="assets/morphact-overview.png" target="_blank" rel="noopener" aria-label="Open the MorphAct architecture figure at full resolution in a new tab"><img src="assets/morphact-overview.png" width="1774" height="887" loading="lazy" alt="MorphAct architecture: image and language embeddings condition the vision-language parameter generator. Adapted features and robot state condition the action parameter generator. Both produce low-rank factors for their corresponding modules, while the action module keeps its native solver inputs."></a>
+          <figcaption>Updates are generated once per replanning context and reused throughout the action chunk.</figcaption>
+        </figure>
+        <div class="method-steps">
+          <article><span class="step-number">01</span><h3>Read the context</h3><p>Image and language embeddings condition low-rank updates for the vision–language module.</p></article>
+          <article><span class="step-number">02</span><h3>Couple the adaptation</h3><p>Adapted representations and robot state condition the action-side generator.</p></article>
+          <article><span class="step-number">03</span><h3>Keep the native policy</h3><p>Train with the native action objective and reuse generated updates within each action chunk.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="section wrap" aria-labelledby="results-title">
+      <div class="section-heading"><p class="eyebrow">03 / In simulation</p><h2 id="results-title">Consistent gains across backbones.</h2><p class="section-intro">Higher average closed-loop success on LIBERO and Meta-World for all three backbones.</p></div>
+      <div class="benchmark-tabs" role="tablist" aria-label="Simulation benchmark" hidden>
+        <button type="button" id="tab-libero" role="tab" aria-selected="true" aria-controls="panel-libero">LIBERO</button>
+        <button type="button" id="tab-metaworld" role="tab" aria-selected="false" aria-controls="panel-metaworld" tabindex="-1">Meta-World</button>
+      </div>
+      <div class="benchmark-panel" id="panel-libero" role="tabpanel" aria-labelledby="tab-libero" tabindex="0">
+        <div class="benchmark-header"><div><h3>LIBERO</h3><p>40 tasks · 4 suites · 50 rollouts per task</p></div><p class="legend"><span class="baseline-key">Baseline</span><span class="ours-key">MorphAct</span></p></div>
+        <div class="results-grid">
+          <article class="result-item"><h4>X-VLA</h4><div class="score-row"><span>93.05<span class="percent">%</span></span><strong>96.60<span class="percent">%</span></strong></div><div class="bar-pair" aria-hidden="true"><div class="bar baseline" style="--score:93.05%"></div><div class="bar ours" style="--score:96.60%"></div></div><p class="gain">+3.55 <span>percentage points</span></p></article>
+          <article class="result-item"><h4>π<sub>0</sub></h4><div class="score-row"><span>94.15<span class="percent">%</span></span><strong>96.65<span class="percent">%</span></strong></div><div class="bar-pair" aria-hidden="true"><div class="bar baseline" style="--score:94.15%"></div><div class="bar ours" style="--score:96.65%"></div></div><p class="gain">+2.50 <span>percentage points</span></p></article>
+          <article class="result-item"><h4>π<sub>0.5</sub></h4><div class="score-row"><span>96.85<span class="percent">%</span></span><strong>97.35<span class="percent">%</span></strong></div><div class="bar-pair" aria-hidden="true"><div class="bar baseline" style="--score:96.85%"></div><div class="bar ours" style="--score:97.35%"></div></div><p class="gain">+0.50 <span>percentage points</span></p></article>
+        </div>
+        <p class="protocol"><strong>Metric:</strong> mean success rate across Spatial, Object, Goal, and Long (LIBERO-10). Bars use a 0–100% scale. Long has the largest gain for each backbone; individual suite scores vary.</p>
+      </div>
+      <div class="benchmark-panel" id="panel-metaworld" role="tabpanel" aria-labelledby="tab-metaworld" tabindex="0">
+        <div class="benchmark-header"><div><h3>Meta-World MT50</h3><p>50 tasks · 4 difficulty groups · 20 rollouts per task</p></div><p class="legend"><span class="baseline-key">Baseline</span><span class="ours-key">MorphAct</span></p></div>
+        <div class="results-grid">
+          <article class="result-item"><h4>X-VLA</h4><div class="score-row"><span>55.54<span class="percent">%</span></span><strong>62.81<span class="percent">%</span></strong></div><div class="bar-pair" aria-hidden="true"><div class="bar baseline" style="--score:55.54%"></div><div class="bar ours" style="--score:62.81%"></div></div><p class="gain">+7.27 <span>percentage points</span></p></article>
+          <article class="result-item"><h4>π<sub>0</sub></h4><div class="score-row"><span>50.75<span class="percent">%</span></span><strong>64.48<span class="percent">%</span></strong></div><div class="bar-pair" aria-hidden="true"><div class="bar baseline" style="--score:50.75%"></div><div class="bar ours" style="--score:64.48%"></div></div><p class="gain">+13.73 <span>percentage points</span></p></article>
+          <article class="result-item"><h4>π<sub>0.5</sub></h4><div class="score-row"><span>48.70<span class="percent">%</span></span><strong>63.83<span class="percent">%</span></strong></div><div class="bar-pair" aria-hidden="true"><div class="bar baseline" style="--score:48.70%"></div><div class="bar ours" style="--score:63.83%"></div></div><p class="gain">+15.13 <span>percentage points</span></p></article>
+        </div>
+        <p class="protocol"><strong>Metric:</strong> unweighted average of Easy (28 tasks), Medium (11), Hard (6), and Very Hard (5) group success rates. Bars use a 0–100% scale. This is a group average, not a task-weighted MT50 average.</p>
+      </div>
+      <p class="results-note">Results and evaluation settings are reported in the manuscript. Gains denote absolute percentage-point differences.</p>
+    </section>
+
+    <section id="real-world" class="section real-world-section" aria-labelledby="real-world-title">
+      <div class="wrap">
+        <div class="section-heading"><p class="eyebrow">04 / On real robots</p><h2 id="real-world-title">Beyond simulation.</h2><p class="section-intro">Four manipulation tasks. Two robot platforms.<br>Compare π<sub>0</sub> with and without MorphAct.</p></div>
+        <div class="robot-grid">
+          <article class="robot-task"><img src="assets/real-world-panel-000.png" width="640" height="480" loading="lazy" alt="SO-101 gripper placing a green block into an orange tray."><div class="task-description"><p class="robot-label">SO-101</p><h3>Block placement</h3><p class="task-score"><span>80%</span><span class="score-arrow" aria-label="to">→</span><strong>93%</strong><span class="task-gain">+13 pp</span></p></div></article>
+          <article class="robot-task"><img class="orange-frame" src="assets/real-world-panel-001.png" width="448" height="448" loading="lazy" alt="xArm6 gripper holding an orange above a tabletop."><div class="task-description"><p class="robot-label">xArm6</p><h3>Orange pick-and-place</h3><p class="task-score"><span>65%</span><span class="score-arrow" aria-label="to">→</span><strong>80%</strong><span class="task-gain">+15 pp</span></p></div></article>
+          <article class="robot-task"><img src="assets/real-world-panel-002.png" width="640" height="480" loading="lazy" alt="xArm6 gripper retrieving an Oreo package from a stocked shelf."><div class="task-description"><p class="robot-label">xArm6</p><h3>Oreo retrieval</h3><p class="task-score"><span>60%</span><span class="score-arrow" aria-label="to">→</span><strong>77%</strong><span class="task-gain">+17 pp</span></p></div></article>
+          <article class="robot-task"><img src="assets/real-world-panel-003.png" width="640" height="480" loading="lazy" alt="xArm6 gripper placing a beverage can into a shallow box."><div class="task-description"><p class="robot-label">xArm6</p><h3>Can placement</h3><p class="task-score"><span>75%</span><span class="score-arrow" aria-label="to">→</span><strong>88%</strong><span class="task-gain">+13 pp</span></p></div></article>
+        </div>
+        <p class="protocol real-protocol">Representative rollout frames. Scores show <strong>π<sub>0</sub> baseline → π<sub>0</sub> + MorphAct</strong>. Each method uses 100 demonstration episodes and 100 physical evaluation rollouts per task.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="#main"><img src="assets/morphact.svg" width="30" height="30" alt="">MorphAct</a><p>Contextual Parameterization of Vision–Language–Action Models</p><a class="back-to-top" href="#main">Back to top ↑</a></footer>
+</body>
+</html>
