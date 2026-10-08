@@ -13,7 +13,7 @@
   <meta property="og:image:alt" content="MorphAct generates context-dependent parameter updates through a shared adaptation rule.">
   <title>MorphAct: Contextual Parameterization of Vision–Language–Action Models</title>
   <link rel="icon" type="image/svg+xml" href="assets/morphact.svg">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
   <script src="script.js?v=2" defer></script>
 </head>
 <body>
@@ -38,32 +38,32 @@
       </h1>
       <div class="paper-credits">
         <ul class="author-row" aria-label="Authors">
-          <li>Ziyan Liu<sup>1,*</sup></li>
-          <li>Jiting Liu<sup>2,*</sup></li>
+          <li>Ziyan Liu<sup>2,*</sup></li>
+          <li>Jiting Liu<sup>1,*</sup></li>
           <li>Weihong Zhong<sup>*</sup></li>
-          <li>Wenda Yu<sup>3</sup></li>
-          <li>Yeqiu Chen<sup>1</sup></li>
+          <li>Wenda Yu<sup>4</sup></li>
+          <li>Yeqiu Chen<sup>2</sup></li>
         </ul>
         <ul class="author-row" aria-label="Authors">
-          <li>Jason Li<sup>4</sup></li>
+          <li>Jason Li<sup>3</sup></li>
           <li>Xiaojiang Peng</li>
-          <li>Shuyuan Hu<sup>2</sup></li>
-          <li>Kai Wang<sup>4,†</sup></li>
-          <li>Bo Zhao<sup>2,†</sup></li>
+          <li>Shuyuan Hu<sup>1</sup></li>
+          <li>Kai Wang<sup>3,†</sup></li>
+          <li>Bo Zhao<sup>1,†</sup></li>
         </ul>
         <ul class="affiliations" aria-label="Author affiliations">
-          <li><sup>1</sup>University of Science and Technology of China</li>
-          <li><sup>2</sup>Shanghai Jiao Tong University</li>
-          <li><sup>3</sup>Tongji University</li>
-          <li><sup>4</sup>Nanyang Technological University</li>
+          <li><sup>1</sup>Shanghai Jiao Tong University</li>
+          <li><sup>2</sup>University of Science and Technology of China</li>
+          <li><sup>3</sup>Nanyang Technological University</li>
+          <li><sup>4</sup>Tongji University</li>
         </ul>
         <p class="author-notes"><span><sup>*</sup>Equal contribution</span><span><sup>†</sup>Corresponding authors</span></p>
       </div>
       <div class="institution-logos" aria-label="Participating institutions">
-        <a class="institution-logo institution-ustc" href="https://www.ustc.edu.cn/" target="_blank" rel="noopener" aria-label="University of Science and Technology of China official website"><img src="assets/institutions/ustc-logo.jpg" alt="University of Science and Technology of China" decoding="async"></a>
         <a class="institution-logo institution-sjtu" href="https://www.sjtu.edu.cn/" target="_blank" rel="noopener" aria-label="Shanghai Jiao Tong University official website"><img src="assets/institutions/sjtu-logo.png" alt="Shanghai Jiao Tong University" decoding="async"></a>
-        <a class="institution-logo institution-tongji" href="https://www.tongji.edu.cn/" target="_blank" rel="noopener" aria-label="Tongji University official website"><img src="assets/institutions/tongji-badge.png" alt="Tongji University" decoding="async"></a>
+        <a class="institution-logo institution-ustc" href="https://www.ustc.edu.cn/" target="_blank" rel="noopener" aria-label="University of Science and Technology of China official website"><img src="assets/institutions/ustc-logo.jpg" alt="University of Science and Technology of China" decoding="async"></a>
         <a class="institution-logo institution-ntu" href="https://www.ntu.edu.sg/" target="_blank" rel="noopener" aria-label="Nanyang Technological University official website"><img src="assets/institutions/ntu-logo.webp" alt="Nanyang Technological University" decoding="async"></a>
+        <a class="institution-logo institution-tongji" href="https://www.tongji.edu.cn/" target="_blank" rel="noopener" aria-label="Tongji University official website"><img src="assets/institutions/tongji-badge.png" alt="Tongji University" decoding="async"></a>
       </div>
       <div class="resource-links" aria-label="Research resources">
         <!-- Replace each disabled button with an anchor only when its release URL is available. -->
@@ -83,11 +83,6 @@
         </a>
         <figcaption><div><strong>Share the adaptation rule, not a fixed update.</strong>One task brings changing demands. MorphAct generates parameter updates for the current context.<span class="figure-note">Operation labels are illustrative, not model inputs. Parameter blocks are schematic.</span></div><a class="figure-source" href="assets/morphact-teaser.pdf" target="_blank" rel="noopener" aria-label="Open the original paper teaser PDF in a new tab">Original figure ↗</a></figcaption>
       </figure>
-      <div class="highlights" aria-label="Selected results reported in the paper">
-        <div><strong>3<span> backbones</span></strong><p>X-VLA, π<sub>0</sub>, and π<sub>0.5</sub></p></div>
-        <div><strong>+15.13<span> pp</span></strong><p>Meta-World average · π<sub>0.5</sub></p></div>
-        <div><strong>+17<span> pp</span></strong><p>Real-world Oreo retrieval · π<sub>0</sub></p></div>
-      </div>
     </section>
 
     <section id="overview" class="section wrap overview" aria-labelledby="overview-title">
@@ -145,10 +140,10 @@
       <div class="wrap">
         <div class="section-heading"><p class="eyebrow">04 / On real robots</p><h2 id="real-world-title">Beyond simulation.</h2><p class="section-intro">Four manipulation tasks. Two robot platforms.<br>Compare π<sub>0</sub> with and without MorphAct.</p></div>
         <div class="robot-grid">
-          <article class="robot-task"><img src="assets/real-world-panel-000.png" width="640" height="480" loading="lazy" alt="SO-101 gripper placing a green block into an orange tray."><div class="task-description"><p class="robot-label">SO-101</p><h3>Block placement</h3><p class="task-score"><span>80%</span><span class="score-arrow" aria-label="to">→</span><strong>93%</strong><span class="task-gain">+13 pp</span></p></div></article>
-          <article class="robot-task"><img class="orange-frame" src="assets/real-world-panel-001.png" width="448" height="448" loading="lazy" alt="xArm6 gripper holding an orange above a tabletop."><div class="task-description"><p class="robot-label">xArm6</p><h3>Orange pick-and-place</h3><p class="task-score"><span>65%</span><span class="score-arrow" aria-label="to">→</span><strong>80%</strong><span class="task-gain">+15 pp</span></p></div></article>
-          <article class="robot-task"><img src="assets/real-world-panel-002.png" width="640" height="480" loading="lazy" alt="xArm6 gripper retrieving an Oreo package from a stocked shelf."><div class="task-description"><p class="robot-label">xArm6</p><h3>Oreo retrieval</h3><p class="task-score"><span>60%</span><span class="score-arrow" aria-label="to">→</span><strong>77%</strong><span class="task-gain">+17 pp</span></p></div></article>
-          <article class="robot-task"><img src="assets/real-world-panel-003.png" width="640" height="480" loading="lazy" alt="xArm6 gripper placing a beverage can into a shallow box."><div class="task-description"><p class="robot-label">xArm6</p><h3>Can placement</h3><p class="task-score"><span>75%</span><span class="score-arrow" aria-label="to">→</span><strong>88%</strong><span class="task-gain">+13 pp</span></p></div></article>
+          <article class="robot-task"><img src="assets/real-world-panel-000.png" width="640" height="480" loading="lazy" alt="SO-101 gripper placing a green block into an orange tray."><div class="task-description"><p class="robot-label">SO-101</p><h3>Block placement</h3><p class="task-score"><span>80%</span><span class="score-arrow" aria-label="to">→</span><strong>93%</strong></p></div></article>
+          <article class="robot-task"><img class="orange-frame" src="assets/real-world-panel-001.png" width="448" height="448" loading="lazy" alt="xArm6 gripper holding an orange above a tabletop."><div class="task-description"><p class="robot-label">xArm6</p><h3>Orange pick-and-place</h3><p class="task-score"><span>65%</span><span class="score-arrow" aria-label="to">→</span><strong>80%</strong></p></div></article>
+          <article class="robot-task"><img src="assets/real-world-panel-002.png" width="640" height="480" loading="lazy" alt="xArm6 gripper retrieving an Oreo package from a stocked shelf."><div class="task-description"><p class="robot-label">xArm6</p><h3>Oreo retrieval</h3><p class="task-score"><span>60%</span><span class="score-arrow" aria-label="to">→</span><strong>77%</strong></p></div></article>
+          <article class="robot-task"><img src="assets/real-world-panel-003.png" width="640" height="480" loading="lazy" alt="xArm6 gripper placing a beverage can into a shallow box."><div class="task-description"><p class="robot-label">xArm6</p><h3>Can placement</h3><p class="task-score"><span>75%</span><span class="score-arrow" aria-label="to">→</span><strong>88%</strong></p></div></article>
         </div>
         <p class="protocol real-protocol">Representative rollout frames. Scores show <strong>π<sub>0</sub> baseline → π<sub>0</sub> + MorphAct</strong>. Each method uses 100 demonstration episodes and 100 physical evaluation rollouts per task.</p>
       </div>

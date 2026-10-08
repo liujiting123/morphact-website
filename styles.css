@@ -60,7 +60,7 @@ strong { font-weight: 650; }
 .author-notes { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 22px; margin-top: 9px; font-size: 14px; color: var(--muted); }
 .author-notes sup { margin-right: 3px; }
 .institution-logos { display: flex; align-items: center; justify-content: center; gap: 44px; margin: 24px auto 0; max-width: 780px; }
-.institution-logo { display: flex; align-items: center; justify-content: center; height: 79px; width: 130px; flex-shrink: 0; }
+.institution-logo { display: flex; align-items: center; justify-content: center; height: 79px; width: 130px; flex-shrink: 1; }
 .institution-logo img { width: auto; height: 76px; max-width: 100%; object-fit: contain; }
 .institution-ntu { width: 190px; }
 .institution-ntu img { width: 100%; height: auto; max-height: 76px; }
@@ -82,11 +82,6 @@ figcaption { font-size: 13px; color: var(--muted); line-height: 1.7; margin-top:
 .figure-note { display: block; font-size: 12px; margin-top: 3px; }
 .figure-source { flex-shrink: 0; color: var(--green); font-size: 12px; font-weight: 550; padding-block: 4px; border-bottom: 1px solid #bfccbb; }
 .figure-source:hover { color: var(--green-dark); border-color: var(--green); }
-.highlights { display: grid; grid-template-columns: repeat(3, 1fr); padding-block: 28px; margin-top: 33px; border-block: 1px solid var(--line); }
-.highlights > div + div { border-left: 1px solid var(--line); }
-.highlights strong { font-size: 39px; letter-spacing: -1.7px; font-weight: 600; color: var(--green-dark); line-height: 1.4; font-variant-numeric: tabular-nums; }
-.highlights strong > span { font-size: 15px; letter-spacing: 0; font-weight: 500; color: var(--muted); }
-.highlights p { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
 .section { padding-block: 86px; }
 .section-heading { margin-bottom: 34px; }
@@ -156,7 +151,6 @@ h2 span { color: var(--green); }
 .task-score { display: flex; align-items: center; gap: 7px; font-size: 22px; margin-top: 19px; font-variant-numeric: tabular-nums; color: #657360; }
 .task-score strong { color: var(--green-dark); }
 .score-arrow { font-size: 16px; color: #99a18e; }
-.task-gain { font-size: 10px; color: var(--green-dark); margin-left: auto; background: #eaf1e4; padding: 3px 7px; border-radius: 100px; white-space: nowrap; }
 .real-protocol { padding: 0; border: 0; background: transparent; margin-top: 25px; max-width: 870px; }
 .site-footer { background: #243c31; color: #c5d2c3; }
 .footer-inner { display: flex; align-items: center; gap: 26px; padding-block: 31px; }
@@ -192,7 +186,6 @@ h2 span { color: var(--green); }
   .task-description { padding: 22px; }
   .robot-task h3 { font-size: 18px; }
   .task-score { font-size: 26px; }
-  .task-gain { font-size: 11px; }
   .method-steps { gap: 25px; }
 }
 
@@ -232,10 +225,6 @@ h2 span { color: var(--green); }
   .teaser figcaption strong { font-size: 13px; line-height: 1.55; }
   .figure-note { font-size: 10px; line-height: 1.8; margin-top: 5px; }
   .figure-source { display: inline-block; font-size: 11px; margin-top: 8px; }
-  .highlights { margin-top: 23px; padding-block: 21px; }
-  .highlights strong { font-size: 27px; letter-spacing: -1px; }
-  .highlights strong > span { display: block; font-size: 10px; letter-spacing: 0; }
-  .highlights p { font-size: 10px; padding-inline: 5px; margin-top: 7px; line-height: 1.7; }
   .section { padding-block: 53px; }
   .section-heading { margin-bottom: 27px; }
   .section-heading .eyebrow { font-size: 10px; margin-bottom: 12px; }
@@ -276,7 +265,6 @@ h2 span { color: var(--green); }
   .task-description { padding: 15px 12px; }
   .robot-task h3 { font-size: 14px; min-height: 42px; }
   .task-score { gap: 5px; font-size: 20px; flex-wrap: wrap; margin-top: 13px; }
-  .task-gain { font-size: 9px; padding: 2px 5px; }
   .robot-label { font-size: 9px; }
   .real-protocol { padding: 0; font-size: 11px; }
   .footer-inner { flex-wrap: wrap; gap: 11px 20px; padding-block: 26px; }
@@ -302,13 +290,10 @@ h2 span { color: var(--green); }
   .institution-ntu { width: 99px; }
   .resource { padding-inline: 10px; gap: 5px; }
   .availability { padding-left: 5px; }
-  .highlights strong { font-size: 24px; }
-  .highlights p { font-size: 9px; }
   .robot-grid { grid-template-columns: 1fr; gap: 20px; }
   .robot-task h3 { min-height: 0; font-size: 16px; }
   .task-description { padding: 17px; }
   .task-score { font-size: 24px; }
-  .task-gain { font-size: 11px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
