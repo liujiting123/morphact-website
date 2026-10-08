@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#1762cf">
+  <meta name="theme-color" content="#244d3d">
   <meta name="description" content="MorphAct: Contextual Parameterization of Vision–Language–Action Models. A shared adaptation rule that generates context-dependent low-rank updates for robot policies.">
   <meta property="og:title" content="MorphAct — Contextual Parameterization of VLA Models">
   <meta property="og:description" content="Share an adaptation rule, specialize the updates. Contextual parameter generation for vision–language–action models.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://liujiting123.github.io/morphact-website/">
+  <meta property="og:image" content="https://liujiting123.github.io/morphact-website/assets/morphact-teaser.png?v=paper">
+  <meta property="og:image:alt" content="MorphAct generates context-dependent parameter updates through a shared adaptation rule.">
   <title>MorphAct: Contextual Parameterization of Vision–Language–Action Models</title>
   <link rel="icon" type="image/svg+xml" href="assets/morphact.svg">
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <script src="script.js?v=2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -29,8 +32,8 @@
 
   <main id="main">
     <section class="hero wrap" aria-labelledby="paper-title">
-      <p class="eyebrow">Vision · Language · Action</p>
-      <h1 id="paper-title"><span class="wordmark"><img src="assets/morphact.svg" width="100" height="100" alt="">MorphAct</span><span class="paper-subtitle">Contextual Parameterization<br>of Vision–Language–Action Models</span></h1>
+      <p class="eyebrow hero-eyebrow">Vision · Language · Action</p>
+      <h1 id="paper-title"><span class="wordmark"><img src="assets/morphact.svg" width="100" height="100" alt=""><span>Morph<span class="wordmark-accent">Act</span></span></span><span class="paper-subtitle">Contextual Parameterization<br>of Vision–Language–Action Models</span></h1>
       <p class="hero-description">One shared adaptation rule.<br class="mobile-break"> Parameter updates that change with context.</p>
       <!-- Add verified authors and affiliations here when ready for publication. -->
       <div class="resource-links" aria-label="Research resources">
@@ -45,10 +48,11 @@
         </button>
       </div>
       <figure class="teaser">
-        <a href="assets/morphact-teaser.png" target="_blank" rel="noopener" aria-label="Open the MorphAct concept figure at full resolution in a new tab">
-          <img src="assets/morphact-teaser.png" width="2172" height="724" fetchpriority="high" alt="A single manipulation task moves through free-space motion, contact, transport, and precise placement. Static adaptation reuses one update; MorphAct generates different vision-language and action updates for each context. The projected adapter spaces are conceptual illustrations.">
+        <a class="figure-link" data-lightbox data-figure-title="The MorphAct idea" href="assets/morphact-teaser.png?v=paper" target="_blank" rel="noopener" aria-label="Enlarge the MorphAct teaser"><span class="figure-label" aria-hidden="true">Paper teaser</span>
+          <img src="assets/morphact-teaser.png?v=paper" width="3199" height="1106" fetchpriority="high" alt="Paper teaser: (a) a block-placement task progresses through free-space motion, contact, transport, and precise placement; (b) static adaptation applies one fixed update across changing contexts; (c) MorphAct uses a shared adaptation rule to generate context-dependent parameter updates. Operation labels are illustrative, not model inputs.">
+          <span class="figure-expand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 3l6 6m12-6-6 6M3 21l6-6m12 6-6-6"/></svg></span>
         </a>
-        <figcaption>One task, changing contexts. <strong>MorphAct lets the policy adapt as the interaction evolves.</strong><span class="figure-note">Conceptual illustration. Operation labels are shown for explanation; the model does not use them.</span></figcaption>
+        <figcaption><div><strong>Share the adaptation rule, not a fixed update.</strong>One task brings changing demands. MorphAct generates parameter updates for the current context.<span class="figure-note">Operation labels are illustrative, not model inputs. Parameter blocks are schematic.</span></div><a class="figure-source" href="assets/morphact-teaser.pdf" target="_blank" rel="noopener" aria-label="Open the original paper teaser PDF in a new tab">Original figure ↗</a></figcaption>
       </figure>
       <div class="highlights" aria-label="Selected results reported in the paper">
         <div><strong>3<span> backbones</span></strong><p>X-VLA, π<sub>0</sub>, and π<sub>0.5</sub></p></div>
@@ -58,7 +62,7 @@
     </section>
 
     <section id="overview" class="section wrap overview" aria-labelledby="overview-title">
-      <div class="section-heading"><p class="eyebrow">01 / The idea</p><h2 id="overview-title">Share the rule.<br><span>Specialize the updates.</span></h2></div>
+      <div class="section-heading"><p class="eyebrow">01 / The idea</p><h2 id="overview-title">Share the rule.<br><span>Specialize the updates.</span></h2><div class="context-equation"><p class="equation" aria-label="Theta of x equals theta zero plus delta theta of x">θ(x) = θ₀ + Δθ(x)</p><p class="equation-label">One policy. Context-conditioned parameters.</p></div></div>
       <div class="overview-copy">
         <p class="lead">A robot’s perceptual and control demands change even within a single task. A fixed parameter update has to accommodate them all.</p>
         <p>MorphAct is a contextual parameterization framework for vision–language–action models. Instead of learning one static update, it learns a shared rule that generates <strong>low-rank parameter updates from the current context</strong>.</p>
@@ -70,7 +74,7 @@
       <div class="wrap">
         <div class="section-heading centered"><p class="eyebrow">02 / How it works</p><h2 id="method-title">From context to parameters to action.</h2><p class="section-intro">Adapt what the policy sees, then use that representation to adapt how it acts.</p></div>
         <figure class="method-figure">
-          <a href="assets/morphact-overview.png" target="_blank" rel="noopener" aria-label="Open the MorphAct architecture figure at full resolution in a new tab"><img src="assets/morphact-overview.png" width="1774" height="887" loading="lazy" alt="MorphAct architecture: image and language embeddings condition the vision-language parameter generator. Adapted features and robot state condition the action parameter generator. Both produce low-rank factors for their corresponding modules, while the action module keeps its native solver inputs."></a>
+          <a class="figure-link" data-lightbox data-figure-title="The MorphAct architecture" href="assets/morphact-overview.png" target="_blank" rel="noopener" aria-label="Enlarge the MorphAct architecture figure"><span class="figure-label" aria-hidden="true">Method overview</span><img src="assets/morphact-overview.png" width="1774" height="887" loading="lazy" alt="MorphAct architecture: image and language embeddings condition the vision-language parameter generator. Adapted features and robot state condition the action parameter generator. Both produce low-rank factors for their corresponding modules, while the action module keeps its native solver inputs."><span class="figure-expand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 3l6 6m12-6-6 6M3 21l6-6m12 6-6-6"/></svg></span></a>
           <figcaption>Updates are generated once per replanning context and reused throughout the action chunk.</figcaption>
         </figure>
         <div class="method-steps">
@@ -121,6 +125,18 @@
       </div>
     </section>
   </main>
-  <footer class="site-footer wrap"><a class="brand" href="#main"><img src="assets/morphact.svg" width="30" height="30" alt="">MorphAct</a><p>Contextual Parameterization of Vision–Language–Action Models</p><a class="back-to-top" href="#main">Back to top ↑</a></footer>
+  <footer class="site-footer"><div class="wrap footer-inner"><a class="brand" href="#main"><img src="assets/morphact.svg" width="30" height="30" alt="">MorphAct</a><p>Contextual Parameterization of Vision–Language–Action Models</p><a class="back-to-top" href="#main">Back to top ↑</a></div></footer>
+  <dialog class="figure-dialog" id="figure-dialog" aria-labelledby="figure-dialog-title">
+    <div class="dialog-toolbar">
+      <h2 id="figure-dialog-title">Figure</h2>
+      <div class="dialog-actions">
+        <button type="button" class="icon-button" data-zoom aria-label="Zoom in" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M8 10.5h5m-2.5-2.5v5"/></svg></button>
+        <a class="icon-button" data-original target="_blank" rel="noopener" aria-label="Open full-resolution image in a new tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 5H4v15h15v-6"/></svg></a>
+        <button type="button" class="icon-button" data-close aria-label="Close figure" autofocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button>
+      </div>
+    </div>
+    <div class="dialog-canvas"><img alt=""></div>
+    <p class="dialog-hint">Click the image to zoom · Scroll to explore · Esc to close</p>
+  </dialog>
 </body>
 </html>
