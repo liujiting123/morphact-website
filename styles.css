@@ -69,7 +69,7 @@ strong { font-weight: 650; }
 .resource svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .availability { font-size: 10px; color: #677560; font-weight: 500; border-left: 1px solid #dbe2d5; padding-left: 9px; }
 
-.teaser { margin-top: 36px; text-align: left; }
+.teaser { margin-top: 0; text-align: left; }
 .figure-link { position: relative; display: block; padding: 44px 18px 18px; border: 1px solid var(--line); border-radius: 14px; background: white; overflow: hidden; transition: border-color .2s, box-shadow .2s; cursor: zoom-in; }
 .teaser .figure-link { box-shadow: 0 12px 32px -22px rgb(31 55 37 / 22%); }
 .figure-link:hover { border-color: #9aac98; box-shadow: 0 8px 26px -18px rgb(31 55 37 / 28%); }
@@ -140,18 +140,6 @@ h2 span { color: var(--green); }
 .protocol { padding: 17px 30px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.8; color: var(--muted); background: #f8faf5; }
 .results-note { font-size: 12px; color: var(--muted); margin-top: 17px; }
 
-.real-world-section { background: #f0f3ec; border-top: 1px solid #e2e7dc; }
-.robot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.robot-task { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 2px #20332d03, 0 6px 16px -12px #20332d18; }
-.robot-task > img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
-.robot-task > .orange-frame { object-position: center 20%; }
-.task-description { padding: 20px 17px; }
-.robot-label { color: #65715f; font-size: 10px; letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
-.robot-task h3 { font-size: 15px; font-weight: 650; line-height: 1.5; letter-spacing: -.25px; }
-.task-score { display: flex; align-items: center; gap: 7px; font-size: 22px; margin-top: 19px; font-variant-numeric: tabular-nums; color: #657360; }
-.task-score strong { color: var(--green-dark); }
-.score-arrow { font-size: 16px; color: #99a18e; }
-.real-protocol { padding: 0; border: 0; background: transparent; margin-top: 25px; max-width: 870px; }
 .site-footer { background: #243c31; color: #c5d2c3; }
 .footer-inner { display: flex; align-items: center; gap: 26px; padding-block: 31px; }
 .site-footer .brand { font-size: 18px; color: #f5f8ef; }
@@ -182,10 +170,6 @@ h2 span { color: var(--green); }
   .result-item { padding-inline: 22px; }
   .score-row { font-size: 26px; }
   .gain span { display: block; margin: 0; }
-  .robot-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .task-description { padding: 22px; }
-  .robot-task h3 { font-size: 18px; }
-  .task-score { font-size: 26px; }
   .method-steps { gap: 25px; }
 }
 
@@ -216,7 +200,6 @@ h2 span { color: var(--green); }
   .resource { font-size: 12px; gap: 7px; padding-inline: 13px; }
   .resource svg { width: 15px; height: 15px; }
   .availability { padding-left: 7px; font-size: 9px; }
-  .teaser { margin-top: 28px; }
   .figure-link { border-radius: 9px; padding: 36px 8px 8px; }
   .figure-label { top: 12px; left: 12px; font-size: 9px; }
   .figure-expand { width: 27px; height: 27px; top: 5px; right: 5px; border-radius: 6px; }
@@ -260,13 +243,6 @@ h2 span { color: var(--green); }
   .gain span { display: inline; margin-left: 4px; font-size: 11px; }
   .protocol { padding: 16px 21px; font-size: 11px; }
   .results-note { font-size: 11px; }
-  .robot-grid { gap: 13px; }
-  .robot-task { border-radius: 9px; }
-  .task-description { padding: 15px 12px; }
-  .robot-task h3 { font-size: 14px; min-height: 42px; }
-  .task-score { gap: 5px; font-size: 20px; flex-wrap: wrap; margin-top: 13px; }
-  .robot-label { font-size: 9px; }
-  .real-protocol { padding: 0; font-size: 11px; }
   .footer-inner { flex-wrap: wrap; gap: 11px 20px; padding-block: 26px; }
   .site-footer p { order: 3; flex-basis: 100%; font-size: 10px; }
   .back-to-top { font-size: 11px; }
@@ -290,10 +266,57 @@ h2 span { color: var(--green); }
   .institution-ntu { width: 99px; }
   .resource { padding-inline: 10px; gap: 5px; }
   .availability { padding-left: 5px; }
-  .robot-grid { grid-template-columns: 1fr; gap: 20px; }
-  .robot-task h3 { min-height: 0; font-size: 16px; }
-  .task-description { padding: 17px; }
-  .task-score { font-size: 24px; }
+}
+
+
+.nav-links .nav-demo { color: var(--green-dark); font-weight: 700; }
+.demo-section { padding-top: 52px; }
+.demo-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.demo-heading .eyebrow { margin-bottom: 9px; font-size: 10px; }
+.demo-heading h2 { font-size: 34px; letter-spacing: -1px; }
+.demo-status { padding: 6px 12px; margin-bottom: 3px; border: 1px solid var(--line); border-radius: 100px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.demo-stage { aspect-ratio: 16 / 9; overflow: hidden; position: relative; border: 1px solid #355a49; border-radius: 16px; background: #16372b; box-shadow: 0 16px 38px -24px #153c2b66; }
+.demo-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 29px 35px 26px; color: #f0f4e9; background: radial-gradient(ellipse at 50% 45%, #31563f 0, #16372b 72%); }
+.demo-poster-top, .demo-poster-bottom { display: flex; justify-content: space-between; align-items: center; gap: 20px; color: #a8bda7; font-size: 11px; }
+.demo-poster-top { letter-spacing: 2.3px; }
+.demo-poster-top svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.2; }
+.demo-poster-center { text-align: center; padding-block: 18px; }
+.demo-wordmark { display: flex; align-items: center; justify-content: center; gap: 21px; font-size: clamp(42px, 5.8vw, 77px); font-weight: 700; letter-spacing: -3.5px; line-height: 1.2; }
+.demo-wordmark img { width: 89px; height: 89px; }
+.demo-poster-center > p { margin-top: 19px; color: #d0ddc5; font-family: Georgia, "Times New Roman", serif; font-size: 28px; letter-spacing: -.4px; }
+.demo-coming { display: inline-block; margin-top: 25px; font-size: 12px; color: #b1c4aa; }
+.demo-poster-bottom { padding-top: 20px; border-top: 1px solid #a8bda730; font-size: 11px; }
+.demo-video { display: block; width: 100%; height: 100%; object-fit: contain; background: #10251c; }
+.teaser-section { padding-top: 58px; }
+
+@media (max-width: 700px) {
+  .demo-section { padding-top: 37px; }
+  .demo-heading { gap: 12px; margin-bottom: 17px; align-items: center; }
+  .demo-heading .eyebrow { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .demo-heading h2 { font-size: 25px; letter-spacing: -.8px; }
+  .demo-status { font-size: 9px; padding: 5px 8px; margin: 0; }
+  .demo-stage { border-radius: 11px; }
+  .demo-placeholder { padding: 13px 16px 12px; }
+  .demo-poster-top { font-size: 7px; letter-spacing: 1.2px; }
+  .demo-poster-top svg { width: 15px; height: 15px; }
+  .demo-poster-center { padding-block: 8px; }
+  .demo-wordmark { gap: 9px; font-size: 34px; letter-spacing: -1.5px; }
+  .demo-wordmark img { width: 42px; height: 42px; }
+  .demo-poster-center > p { font-size: 16px; margin-top: 6px; }
+  .demo-coming { font-size: 9px; margin-top: 8px; }
+  .demo-poster-bottom { gap: 10px; font-size: 7px; padding-top: 8px; }
+  .teaser-section { padding-top: 35px; }
+}
+
+@media (max-width: 380px) {
+  .demo-heading h2 { font-size: 22px; }
+  .demo-status { font-size: 8px; padding-inline: 6px; }
+  .demo-placeholder { padding: 10px 12px; }
+  .demo-wordmark { font-size: 29px; }
+  .demo-wordmark img { width: 36px; height: 36px; }
+  .demo-poster-center > p { font-size: 14px; }
+  .demo-coming { font-size: 8px; margin-top: 6px; }
+  .demo-poster-bottom { font-size: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -309,6 +332,7 @@ h2 span { color: var(--green); }
   .footer-inner { padding-block: 15px; }
   .site-footer { background: none; color: var(--ink); }
   .site-footer .brand { color: var(--ink); }
-  .robot-task, .benchmark-panel, figure { break-inside: avoid; }
+  .benchmark-panel, figure { break-inside: avoid; }
+  .demo-stage { break-inside: avoid; }
   body { background: white; font-size: 12pt; }
 }

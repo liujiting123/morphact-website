@@ -13,7 +13,7 @@
   <meta property="og:image:alt" content="MorphAct generates context-dependent parameter updates through a shared adaptation rule.">
   <title>MorphAct: Contextual Parameterization of Vision–Language–Action Models</title>
   <link rel="icon" type="image/svg+xml" href="assets/morphact.svg">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
   <script src="script.js?v=2" defer></script>
 </head>
 <body>
@@ -22,10 +22,10 @@
     <nav class="nav wrap" aria-label="Main navigation">
       <a class="brand" href="#main"><img src="assets/morphact.svg" width="34" height="34" alt="">MorphAct</a>
       <div class="nav-links">
+        <a class="nav-demo" href="#demo">Demo</a>
         <a href="#overview">Overview</a>
         <a href="#method">Method</a>
         <a href="#results">Results</a>
-        <a href="#real-world">Real world</a>
       </div>
     </nav>
   </header>
@@ -76,6 +76,29 @@
           <span>Code</span><span class="availability">Coming soon</span>
         </button>
       </div>
+    </section>
+
+    <section id="demo" class="demo-section wrap" aria-labelledby="demo-title">
+      <div class="demo-heading">
+        <div><p class="eyebrow">Real-world demo</p><h2 id="demo-title">MorphAct in action.</h2></div>
+        <span class="demo-status">Video coming soon</span>
+      </div>
+      <div class="demo-stage">
+        <!-- Add the video src and remove hidden when the final demo is ready. -->
+        <video id="demo-video" class="demo-video" controls playsinline preload="metadata" aria-label="MorphAct real-world demonstration" hidden></video>
+        <div class="demo-placeholder">
+          <div class="demo-poster-top" aria-hidden="true"><span>VISION · LANGUAGE · ACTION</span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 10h4m-4 4h4m10-4h4m-4 4h4"/></svg></div>
+          <div class="demo-poster-center">
+            <div class="demo-wordmark"><img src="assets/morphact.svg" width="92" height="92" alt=""><span>MorphAct</span></div>
+            <p>From context to action.</p>
+            <span class="demo-coming">Real-world video coming soon</span>
+          </div>
+          <div class="demo-poster-bottom" aria-hidden="true"><span>One shared adaptation rule.</span><span>Context-dependent updates.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="teaser-section wrap">
       <figure class="teaser">
         <a class="figure-link" data-lightbox data-figure-title="The MorphAct idea" href="assets/morphact-teaser.png?v=paper" target="_blank" rel="noopener" aria-label="Enlarge the MorphAct teaser"><span class="figure-label" aria-hidden="true">Paper teaser</span>
           <img src="assets/morphact-teaser.png?v=paper" width="3199" height="1106" fetchpriority="high" alt="Paper teaser: (a) a block-placement task progresses through free-space motion, contact, transport, and precise placement; (b) static adaptation applies one fixed update across changing contexts; (c) MorphAct uses a shared adaptation rule to generate context-dependent parameter updates. Operation labels are illustrative, not model inputs.">
@@ -83,7 +106,7 @@
         </a>
         <figcaption><div><strong>Share the adaptation rule, not a fixed update.</strong>One task brings changing demands. MorphAct generates parameter updates for the current context.<span class="figure-note">Operation labels are illustrative, not model inputs. Parameter blocks are schematic.</span></div><a class="figure-source" href="assets/morphact-teaser.pdf" target="_blank" rel="noopener" aria-label="Open the original paper teaser PDF in a new tab">Original figure ↗</a></figcaption>
       </figure>
-    </section>
+    </div>
 
     <section id="overview" class="section wrap overview" aria-labelledby="overview-title">
       <div class="section-heading"><p class="eyebrow">01 / The idea</p><h2 id="overview-title">Share the rule.<br><span>Specialize the updates.</span></h2><div class="context-equation"><p class="equation" aria-label="Theta of x equals theta zero plus delta theta of x">θ(x) = θ₀ + Δθ(x)</p><p class="equation-label">One policy. Context-conditioned parameters.</p></div></div>
@@ -136,18 +159,6 @@
       <p class="results-note">Results and evaluation settings are reported in the manuscript. Gains denote absolute percentage-point differences.</p>
     </section>
 
-    <section id="real-world" class="section real-world-section" aria-labelledby="real-world-title">
-      <div class="wrap">
-        <div class="section-heading"><p class="eyebrow">04 / On real robots</p><h2 id="real-world-title">Beyond simulation.</h2><p class="section-intro">Four manipulation tasks. Two robot platforms.<br>Compare π<sub>0</sub> with and without MorphAct.</p></div>
-        <div class="robot-grid">
-          <article class="robot-task"><img src="assets/real-world-panel-000.png" width="640" height="480" loading="lazy" alt="SO-101 gripper placing a green block into an orange tray."><div class="task-description"><p class="robot-label">SO-101</p><h3>Block placement</h3><p class="task-score"><span>80%</span><span class="score-arrow" aria-label="to">→</span><strong>93%</strong></p></div></article>
-          <article class="robot-task"><img class="orange-frame" src="assets/real-world-panel-001.png" width="448" height="448" loading="lazy" alt="xArm6 gripper holding an orange above a tabletop."><div class="task-description"><p class="robot-label">xArm6</p><h3>Orange pick-and-place</h3><p class="task-score"><span>65%</span><span class="score-arrow" aria-label="to">→</span><strong>80%</strong></p></div></article>
-          <article class="robot-task"><img src="assets/real-world-panel-002.png" width="640" height="480" loading="lazy" alt="xArm6 gripper retrieving an Oreo package from a stocked shelf."><div class="task-description"><p class="robot-label">xArm6</p><h3>Oreo retrieval</h3><p class="task-score"><span>60%</span><span class="score-arrow" aria-label="to">→</span><strong>77%</strong></p></div></article>
-          <article class="robot-task"><img src="assets/real-world-panel-003.png" width="640" height="480" loading="lazy" alt="xArm6 gripper placing a beverage can into a shallow box."><div class="task-description"><p class="robot-label">xArm6</p><h3>Can placement</h3><p class="task-score"><span>75%</span><span class="score-arrow" aria-label="to">→</span><strong>88%</strong></p></div></article>
-        </div>
-        <p class="protocol real-protocol">Representative rollout frames. Scores show <strong>π<sub>0</sub> baseline → π<sub>0</sub> + MorphAct</strong>. Each method uses 100 demonstration episodes and 100 physical evaluation rollouts per task.</p>
-      </div>
-    </section>
   </main>
   <footer class="site-footer"><div class="wrap footer-inner"><a class="brand" href="#main"><img src="assets/morphact.svg" width="30" height="30" alt="">MorphAct</a><p>Contextual Parameterization of Vision–Language–Action Models</p><a class="back-to-top" href="#main">Back to top ↑</a></div></footer>
   <dialog class="figure-dialog" id="figure-dialog" aria-labelledby="figure-dialog-title">
