@@ -31,6 +31,6 @@ The teaser is a direct 144-dpi render of the manuscript figure `figures/morphact
 
 ## Add the real-world demo
 
-The featured demo appears immediately below the paper header and above the teaser. Its 16:9 stage currently shows a clearly labeled placeholder.
+The demo appears immediately below the paper header. Until the video is available, it occupies only a short availability notice. The teaser belongs to the following core-idea section, after the motivation and explanation.
 
-When the final video is ready, set `src` (and optionally `poster`) on `#demo-video` in `index.html`, remove its `hidden` attribute, and remove `.demo-placeholder` and `.demo-status`. Keep `controls` and `playsinline`; playback starts only when the visitor chooses to play. The video uses `object-fit: contain`, so the recording is shown without cropping.
+When the final video is ready, set `src` (and optionally `poster`) on `#demo-video` in `index.html`, remove `hidden` from `#demo-player`, and remove `#demo-waiting`. Keep `controls` and `playsinline`; playback starts only when the visitor chooses to play. The video uses `object-fit: contain`, so the recording is shown without cropping.
