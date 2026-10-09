@@ -31,6 +31,6 @@ The teaser is a direct 144-dpi render of the manuscript figure `figures/morphact
 
 ## Real-world demo
 
-The 63-second real-world demo appears immediately below the paper header. `assets/morphact-demo-v8.mp4` is the 1080p, 30 fps video; `assets/morphact-demo-v8.jpg` is its poster. The teaser belongs to the following core-idea section, after the motivation and explanation.
+The 63-second real-world demo appears immediately below the paper header. `assets/morphact-demo-v9.mp4` is the 1080p, 30 fps video; `assets/morphact-demo-v9.jpg` is its poster. The teaser belongs to the following core-idea section, after the motivation and explanation.
 
 To update the video, add the new video and poster assets and update `src` and `poster` on `#demo-video` in `index.html`. Use versioned asset names so visitors receive the current video. Keep `controls` and `playsinline`; playback starts only when the visitor chooses to play. The video uses `object-fit: contain`, so the recording is shown without cropping.
