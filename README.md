@@ -29,8 +29,8 @@ Figures and reported numbers were transcribed from the MorphAct manuscript on 20
 
 The teaser is a direct 144-dpi render of the manuscript figure `figures/morphact-teaser.pdf` (3199 × 1106 pixels, updated 2026-10-08). The matching original PDF is included in `assets/` and linked from the figure caption.
 
-## Add the real-world demo
+## Real-world demo
 
-The demo appears immediately below the paper header. Until the video is available, it occupies only a short availability notice. The teaser belongs to the following core-idea section, after the motivation and explanation.
+The 63-second real-world demo appears immediately below the paper header. `assets/morphact-demo-v8.mp4` is the 1080p, 30 fps video; `assets/morphact-demo-v8.jpg` is its poster. The teaser belongs to the following core-idea section, after the motivation and explanation.
 
-When the final video is ready, set `src` (and optionally `poster`) on `#demo-video` in `index.html`, remove `hidden` from `#demo-player`, and remove `#demo-waiting`. Keep `controls` and `playsinline`; playback starts only when the visitor chooses to play. The video uses `object-fit: contain`, so the recording is shown without cropping.
+To update the video, add the new video and poster assets and update `src` and `poster` on `#demo-video` in `index.html`. Use versioned asset names so visitors receive the current video. Keep `controls` and `playsinline`; playback starts only when the visitor chooses to play. The video uses `object-fit: contain`, so the recording is shown without cropping.
