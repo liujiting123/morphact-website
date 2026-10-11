@@ -10,8 +10,7 @@
   const easing = 'cubic-bezier(.22, .61, .36, 1)';
   const entryBlocks = [...document.querySelectorAll(
     '#paper-title, .hero-lead, .paper-credits, .institution-logos, .resource-links, ' +
-    '.demo-section > figure, .section-heading, .paper-figure, .benchmark-panel, ' +
-    '.ablation-charts, .task-card'
+    '.demo-section > figure, .section-heading, .paper-figure, .task-card'
   )];
   const entered = new Set();
   const entryAnimations = new Map();
@@ -65,6 +64,83 @@
       animation.cancel();
       entryAnimations.delete(block);
     }
+  }
+
+  const charts = new Map([...document.querySelectorAll('.benchmark-chart, .ablation-chart')]
+    .map(chart => [chart, { animations: [], ready: false, visible: false, complete: false }]));
+  let chartObserver = null;
+
+  function finishChart(chart, state) {
+    state.complete = true;
+    for (const animation of state.animations) {
+      animation.onfinish = null;
+      animation.cancel();
+    }
+    state.animations.length = 0;
+    if (chartObserver) chartObserver.unobserve(chart);
+  }
+
+  function syncChartPlayback(state) {
+    const mayPlay = state.ready && state.visible && !document.hidden && !reducedMotion.matches;
+    for (const animation of state.animations) {
+      if (mayPlay && animation.playState === 'paused') animation.play();
+      else if (!mayPlay && animation.playState === 'running') animation.pause();
+    }
+  }
+
+  function prepareChart(chart, state) {
+    function animate(element, keyframes, timing) {
+      const animation = element.animate(keyframes, { ...timing, fill: 'both' });
+      animation.pause();
+      animation.currentTime = 0;
+      state.animations.push(animation);
+    }
+    const bars = [...chart.querySelectorAll('.bar-baseline, .bar-ours')];
+    const groups = [...new Set(bars.map(bar => bar.parentElement))];
+    groups.forEach((group, index) => {
+      const delay = index * 110;
+      // Both methods in a suite share the same timing and plotted lower bound.
+      for (const bar of group.querySelectorAll('.bar-baseline, .bar-ours')) {
+        const bottom = Number(bar.getAttribute('y')) + Number(bar.getAttribute('height'));
+        animate(bar, [
+          { transform: `translateY(${bottom}px) scaleY(0) translateY(${-bottom}px)` },
+          { transform: `translateY(${bottom}px) scaleY(1) translateY(${-bottom}px)` }
+        ], { duration: 900, delay, easing });
+      }
+      for (const label of group.querySelectorAll('.bar-value, .ablation-value, .gain-bg, .gain-label, .change-link')) {
+        animate(label, [{ opacity: 0 }, { opacity: 1 }], { duration: 180, delay: delay + 900 });
+      }
+    });
+    if (state.animations.length) {
+      state.animations[state.animations.length - 1].onfinish = () => finishChart(chart, state);
+    }
+  }
+
+  function syncCharts() {
+    if (reducedMotion.matches) {
+      if (chartObserver) chartObserver.disconnect();
+      chartObserver = null;
+      for (const [chart, state] of charts) {
+        if (state.animations.length) finishChart(chart, state);
+      }
+      return;
+    }
+    if (!chartObserver) {
+      chartObserver = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          const state = charts.get(entry.target);
+          state.visible = entry.isIntersecting;
+          state.ready ||= entry.intersectionRatio >= 0.8;
+          syncChartPlayback(state);
+        }
+      }, { threshold: [0, 0.8], rootMargin: '0px 0px -24px 0px' });
+      for (const [chart, state] of charts) {
+        if (state.complete) continue;
+        prepareChart(chart, state);
+        chartObserver.observe(chart);
+      }
+    }
+    for (const state of charts.values()) syncChartPlayback(state);
   }
 
   const overlay = document.querySelector('[data-method-motion]');
@@ -163,6 +239,7 @@
   function syncMotion() {
     if (reducedMotion.matches || document.hidden) stopEntries();
     else observeEntries();
+    syncCharts();
     if (reducedMotion.matches) {
       if (methodStarted) finishMethod();
       else if (methodObserver) {
@@ -176,6 +253,8 @@
 
   function destroy() {
     stopEntries();
+    for (const [chart, state] of charts) finishChart(chart, state);
+    if (chartObserver) chartObserver.disconnect();
     finishMethod();
     document.removeEventListener('visibilitychange', syncMotion);
     document.removeEventListener('focusin', onFocus);
