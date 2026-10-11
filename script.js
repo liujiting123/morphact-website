@@ -8,7 +8,7 @@ function pairedColumns(labels, model, benchmark) {
   const y = value => bottom-(value-min)/(max-min)*plotHeight;
   const gains = labels.map((_,i)=>model.ours[i]-model.baseline[i]);
   const highlightIndex = gains.indexOf(Math.max(...gains));
-  const description=labels.map((label,i)=>`${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%, gain ${signed(model.ours[i]-model.baseline[i])}`).join('. ');
+  const description=labels.map((label,i)=>`${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%${gains[i] < -0.005 ? '' : ', gain '+signed(gains[i])}`).join('. ');
   let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 320" data-min="${min}" data-max="${max}" role="img" aria-label="${escapeText(model.text+'. Displayed y-axis range '+min+' to '+max+' percent. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text>`;
   svg+=`<rect x="${left+step*highlightIndex}" y="51" width="${step}" height="246" rx="3" class="suite-highlight"/>`;
   for(const tick of (min === 84 ? [84,88,92,96,100] : [15,30,45,60,75,90])) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
@@ -16,12 +16,13 @@ function pairedColumns(labels, model, benchmark) {
   labels.forEach((label,i)=>{
     const center=left+step*(i+.5), baselineX=center-29, oursX=center+4, barWidth=25;
     const gain=model.ours[i]-model.baseline[i], positive=gain>0.005, negative=gain < -0.005;
-    const description=`${label}: ${model.baseline[i].toFixed(2)}% → ${model.ours[i].toFixed(2)}% (${signed(gain)})`;
-    svg+=`<g class="suite-group"><title>${escapeText(description)}</title><rect class="gain-bg${i===highlightIndex?' largest-gain':''}${negative?' negative-bg':''}${!positive&&!negative?' neutral-bg':''}" x="${center-33}" y="9" width="66" height="23" rx="3"/><text class="gain-label${i===highlightIndex?' largest-gain':''}${negative?' negative-label':''}${!positive&&!negative?' neutral-label':''}" x="${center}" y="25" text-anchor="middle">${signed(gain)}</text>`;
+    const description=negative ? `${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%` : `${label}: ${model.baseline[i].toFixed(2)}% → ${model.ours[i].toFixed(2)}% (${signed(gain)})`;
+    svg+=`<g class="suite-group"><title>${escapeText(description)}</title>`;
+    if (!negative) svg+=`<rect class="gain-bg${i===highlightIndex?' largest-gain':''}${!positive?' neutral-bg':''}" x="${center-33}" y="9" width="66" height="23" rx="3"/><text class="gain-label${i===highlightIndex?' largest-gain':''}${!positive?' neutral-label':''}" x="${center}" y="25" text-anchor="middle">${signed(gain)}</text>`;
     svg+=`<rect class="bar-baseline" data-value="${model.baseline[i]}" x="${baselineX}" y="${y(model.baseline[i])}" width="${barWidth}" height="${bottom-y(model.baseline[i])}" rx="1"/><rect class="bar-ours" data-value="${model.ours[i]}" x="${oursX}" y="${y(model.ours[i])}" width="${barWidth}" height="${bottom-y(model.ours[i])}" rx="1"/>`;
-    if (Math.abs(gain) > 0.005) {
-      const end=y(model.ours[i]), start=y(model.baseline[i]), direction=positive?1:-1;
-      svg+=`<path class="change-link${negative?' negative-link':''}" d="M ${center} ${start} V ${end} M ${center-2.5} ${end+direction*4} L ${center} ${end} L ${center+2.5} ${end+direction*4}"/>`;
+    if (positive) {
+      const end=y(model.ours[i]), start=y(model.baseline[i]);
+      svg+=`<path class="change-link" d="M ${center} ${start} V ${end} M ${center-2.5} ${end+4} L ${center} ${end} L ${center+2.5} ${end+4}"/>`;
     }
     svg+=`<text class="bar-value baseline-value" x="${baselineX+barWidth/2}" y="${y(model.baseline[i])-7}" text-anchor="middle">${model.baseline[i].toFixed(2)}</text><text class="bar-value ours-value" x="${oursX+barWidth/2}" y="${y(model.ours[i])-7}" text-anchor="middle">${model.ours[i].toFixed(2)}</text>`;
     if(label==='Very Hard') svg+=`<text class="suite-label" x="${center}" y="292" text-anchor="middle"><tspan x="${center}">Very Hard</tspan></text>`;

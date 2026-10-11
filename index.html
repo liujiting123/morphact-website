@@ -13,15 +13,15 @@
   <meta property="og:image:alt" content="MorphAct generates context-dependent parameter updates through a shared adaptation rule.">
   <title>MorphAct: Contextual Parameterization of Vision–Language–Action Models</title>
   <link rel="icon" type="image/svg+xml" href="assets/morphact.svg">
-  <link rel="stylesheet" href="styles.css?v=19">
-  <script src="script.js?v=9" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20">
+  <script src="script.js?v=10" defer></script>
   <script src="motion.js?v=3" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header"><nav class="nav wrap" aria-label="Main navigation">
     <a class="brand" href="#main"><img src="assets/morphact.svg" width="30" height="30" alt="">MorphAct</a>
-    <div class="nav-links"><a href="#demo">Demo</a><a href="#method">Method</a><a href="#results">Benchmarks</a><a href="#ablations">Ablations</a><a href="#analysis">Analysis</a><a href="#real-world">Real world</a></div>
+    <div class="nav-links"><a href="#demo">Demo</a><a href="#analysis">Motivation</a><a href="#method">Method</a><a href="#results">Benchmarks</a><a href="#ablations">Ablations</a><a href="#real-world">Real world</a></div>
   </nav></header>
 
   <main id="main">
@@ -52,10 +52,6 @@
           <li><sup>6</sup>Shenzhen Technology University</li>
         </ul>
         <p class="author-notes"><span><sup>*</sup>Equal contribution</span><span><sup>†</sup>Corresponding authors</span></p>
-        <div class="author-emails" aria-label="Contact emails">
-          <p><a href="mailto:bo.zhao@sjtu.edu.cn">bo.zhao@sjtu.edu.cn</a><a href="mailto:kai.wang960112@gmail.com">kai.wang960112@gmail.com</a></p>
-          <p><a href="mailto:liuziyan@mail.ustc.edu.cn">liuziyan@mail.ustc.edu.cn</a><a href="mailto:liujiting616@gmail.com">liujiting616@gmail.com</a></p>
-        </div>
       </div>
       <div class="institution-logos" aria-label="Participating institutions">
         <a class="institution-logo institution-ustc" href="https://www.ustc.edu.cn/" target="_blank" rel="noopener" aria-label="University of Science and Technology of China official website"><img src="assets/institutions/ustc-logo.jpg" alt="University of Science and Technology of China" decoding="async"></a>
@@ -76,10 +72,36 @@
           <span>Code</span><span class="availability">Coming soon</span>
         </button>
       </div>
+      <div class="author-emails" aria-label="Contact emails">
+        <p><a href="mailto:bo.zhao@sjtu.edu.cn">bo.zhao@sjtu.edu.cn</a><a href="mailto:kai.wang960112@gmail.com">kai.wang960112@gmail.com</a></p>
+        <p><a href="mailto:liuziyan@mail.ustc.edu.cn">liuziyan@mail.ustc.edu.cn</a><a href="mailto:liujiting616@gmail.com">liujiting616@gmail.com</a></p>
+      </div>
     </section>
     <section id="demo" class="demo-section wrap" aria-label="MorphAct demonstration">
       <figure><video id="demo-video" src="assets/morphact-demo-light-v14.mp4" poster="assets/morphact-demo-light-v14-title.jpg" controls autoplay loop muted playsinline preload="metadata" aria-label="MorphAct demonstrations on four bimanual tasks"><a href="assets/morphact-demo-light-v14.mp4">MorphAct bimanual demonstrations</a></video>
       <figcaption>MorphAct in the real world · π<sub>0.5</sub> with contextual adaptation</figcaption></figure>
+    </section>
+
+    <section id="analysis" class="section wrap" aria-labelledby="analysis-title">
+      <div class="section-heading"><div><h2 id="analysis-title">Why contextual updates matter</h2></div><div class="section-intro"><p>Shared adaptation can produce competing descent directions across manipulation contexts. The paper examines this interaction through gradient alignment and one-step transfer, measured at a fixed checkpoint.</p></div></div>
+      <div class="diagnostic-math math-grid">
+        <div><h3>Gradient alignment</h3><div class="equation"><math display="block" translate="no" aria-label="A task gradient is the gradient of the native loss with respect to module parameters. The task-pair alignment is the normalized inner product of two module gradients."><mtable columnalign="left" rowspacing="0.65em"><mtr><mtd><mrow><msubsup><mi>g</mi><mi>i</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>=</mo><mrow><msub><mo>∇</mo><msub><mi>θ</mi><mi>m</mi></msub></msub><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>U</mi><mi>i</mi></msub><mo>;</mo><mi>θ</mi><mo>)</mo></mrow></mrow></mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>=</mo><mfrac><mrow><mo>⟨</mo><msubsup><mi>g</mi><mi>i</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>,</mo><msubsup><mi>g</mi><mi>j</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>⟩</mo></mrow><mrow><msub><mrow><mo>‖</mo><msubsup><mi>g</mi><mi>i</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>‖</mo></mrow><mn>2</mn></msub><msub><mrow><mo>‖</mo><msubsup><mi>g</mi><mi>j</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>‖</mo></mrow><mn>2</mn></msub></mrow></mfrac></mrow></mtd></mtr></mtable></math></div><p class="math-caption">For module <i>m</i>, negative cosine indicates competing local descent directions across task batches.</p></div>
+        <div><h3>One-step transfer</h3><div class="equation"><math display="block" translate="no" aria-label="A source update takes a gradient step from the shared checkpoint. Transfer affinity is one minus the target loss after the update divided by the target loss before it."><mtable columnalign="left" rowspacing="0.65em"><mtr><mtd><mrow><msubsup><mi>θ</mi><mi>i</mi><mo>+</mo></msubsup><mo>=</mo><mrow><mi>θ</mi><mo>−</mo><mi>η</mi><msub><mo>∇</mo><mi>θ</mi></msub><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>U</mi><mi>i</mi></msub><mo>;</mo><mi>θ</mi><mo>)</mo></mrow></mrow></mrow></mtd></mtr><mtr><mtd><mrow><msub><mi>Z</mi><mrow><mi>i</mi><mo>→</mo><mi>j</mi></mrow></msub><mo>=</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>V</mi><mi>j</mi></msub><mo>;</mo><msubsup><mi>θ</mi><mi>i</mi><mo>+</mo></msubsup><mo>)</mo></mrow></mrow><mrow><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>V</mi><mi>j</mi></msub><mo>;</mo><mi>θ</mi><mo>)</mo></mrow></mrow></mfrac></mrow></mrow></mtd></mtr></mtable></math></div><p class="math-caption">A positive transfer score reduces the target loss; a negative score increases it. Every source update starts from the same checkpoint.</p></div>
+      </div>
+      <div class="diagnostic-lead"><figure class="paper-figure">
+      <a class="figure-link" data-lightbox data-figure-title="Gradient conflict and one-step transfer" href="assets/paper/diagnostic-summary.png" target="_blank" rel="noopener" aria-label="Enlarge Gradient conflict and one-step transfer">
+        <img src="assets/paper/diagnostic-summary.png" width="1980" height="765" loading="lazy" decoding="async" alt="At a fixed checkpoint, within-task versus cross-task gradient-conflict rates are 38.94 versus 47.80 percent for VLM and 42.69 versus 48.28 for Action. All 260 source-improving updates increase loss on some other sampled tasks.">
+      </a><figcaption><span><strong>Gradient compatibility, one-step transfer, and cancellation.</strong> Diagnostics at one fixed checkpoint, using sampled losses and gradients.</span></figcaption>
+    </figure><p class="diagnostic-notes"><strong>All 260 source-improving updates increase loss on other sampled tasks.</strong> Cross-task gradient conflict and cancellation are higher in both the VLM and action module. These measurements examine local losses at one fixed checkpoint.</p></div>
+      <div class="diagnostic-grid"><div><h3>Where conflict concentrates</h3><figure class="paper-figure">
+      <a class="figure-link" data-lightbox data-figure-title="Where negative contributions concentrate" href="assets/paper/negative-contributions.png" target="_blank" rel="noopener" aria-label="Enlarge Where negative contributions concentrate">
+        <img src="assets/paper/negative-contributions.png" width="2340" height="1105" loading="lazy" decoding="async" alt="Paper chart of pooled negative cross-task contribution shares by VLM and action parameter group, including the five largest groups and the remaining groups combined.">
+      </a><figcaption><span>Shares describe normalized negative contribution mass, not parameter counts.</span></figcaption>
+    </figure><p class="figure-reading">The action groups outside Transformer blocks, block 00, and block 11 account for <strong>78.88%</strong> of pooled negative contribution before rounding. Together, these groups contribute most of the measured negative mass on the action side.</p></div><div><h3>How it varies with depth</h3><figure class="paper-figure">
+      <a class="figure-link" data-lightbox data-figure-title="Conflict across model depth" href="assets/paper/depth-profiles.png" target="_blank" rel="noopener" aria-label="Enlarge Conflict across model depth">
+        <img src="assets/paper/depth-profiles.png" width="2340" height="1835" loading="lazy" decoding="async" alt="Six paper plots compare cross-task and within-task negative-cosine frequency and mean negative part across the vision, language, and action Transformer blocks.">
+      </a><figcaption><span>Complete depth profiles. The lower panels use independent y-axis scales.</span></figcaption>
+    </figure></div></div>
     </section>
 
     <section id="overview" class="section wrap" aria-labelledby="overview-title">
@@ -187,6 +209,25 @@
         <div class="section-intro"><p>MorphAct brings contextual specialization to VLA policies, improving overall task success across different architectures and benchmarks.</p></div>
       </div>
 
+      <div class="benchmark-panel" id="panel-metaworld" role="region" aria-labelledby="metaworld-title">
+      <div class="benchmark-heading"><div><h3 id="metaworld-title">Meta-World</h3><p>50 tasks · 4 difficulty groups · 1,000 rollouts per evaluation</p></div><p class="legend"><span class="baseline-key">Baseline</span><span class="ours-key">Baseline + MorphAct</span></p></div>
+      <div class="benchmark-charts" data-charts="metaworld" hidden></div>
+      <p class="benchmark-finding"><strong>Gains extend to harder tasks.</strong> π<sub>0</sub> improves Very Hard from 20.00% to 58.00%. π<sub>0.5</sub> improves Hard from 38.30% to 66.39%.</p>
+      <details class="results-details"><summary>All suite scores &amp; evaluation protocol <span aria-hidden="true">+</span></summary>
+        <p class="table-hint">Scroll to see every column <span aria-hidden="true">↔</span></p>
+        <div class="table-scroll" role="region" aria-label="Meta-World complete success rates" tabindex="0"><table class="results-table" data-benchmark="metaworld">
+            <caption>Success rate (%) · complete breakdown</caption>
+            <thead><tr><th scope="col">Backbone</th><th scope="col">Method</th><th scope="col">Easy</th><th scope="col">Medium</th><th scope="col">Hard</th><th scope="col">Very Hard</th><th scope="col">Avg.</th><th scope="col">Var. (pp²)</th></tr></thead>
+            <tbody><tr class="baseline-row"><th scope="rowgroup" rowspan="2" class="backbone-cell">X-VLA</th><th scope="row" class="method-cell">Baseline</th><td class="suite-cell">72.50</td><td class="suite-cell">46.36</td><td class="suite-cell">48.30</td><td class="suite-cell"><strong>55.00</strong></td><td class="mean-cell">55.54</td><td class="variance-cell">—</td></tr>
+              <tr class="ours-row"><th scope="row" class="method-cell">MorphAct</th><td class="suite-cell"><strong>83.99</strong></td><td class="suite-cell"><strong>58.18</strong></td><td class="suite-cell"><strong>55.28</strong></td><td class="suite-cell"><strong>55.00</strong></td><td class="mean-cell"><strong>63.11</strong></td><td class="variance-cell">1.8400</td></tr></tbody>
+            <tbody><tr class="baseline-row"><th scope="rowgroup" rowspan="2" class="backbone-cell">π<sub>0</sub></th><th scope="row" class="method-cell">Baseline</th><td class="suite-cell">77.90</td><td class="suite-cell">51.80</td><td class="suite-cell">53.30</td><td class="suite-cell">20.00</td><td class="mean-cell">50.75</td><td class="variance-cell">—</td></tr>
+              <tr class="ours-row"><th scope="row" class="method-cell">MorphAct</th><td class="suite-cell"><strong>82.44</strong></td><td class="suite-cell"><strong>71.36</strong></td><td class="suite-cell"><strong>56.39</strong></td><td class="suite-cell"><strong>58.00</strong></td><td class="mean-cell"><strong>67.05</strong></td><td class="variance-cell">0.6342</td></tr></tbody>
+            <tbody><tr class="baseline-row"><th scope="rowgroup" rowspan="2" class="backbone-cell">π<sub>0.5</sub></th><th scope="row" class="method-cell">Baseline</th><td class="suite-cell">70.50</td><td class="suite-cell">45.00</td><td class="suite-cell">38.30</td><td class="suite-cell">41.00</td><td class="mean-cell">48.70</td><td class="variance-cell">—</td></tr>
+              <tr class="ours-row"><th scope="row" class="method-cell">MorphAct</th><td class="suite-cell"><strong>85.77</strong></td><td class="suite-cell"><strong>59.85</strong></td><td class="suite-cell"><strong>66.39</strong></td><td class="suite-cell"><strong>45.67</strong></td><td class="mean-cell"><strong>64.42</strong></td><td class="variance-cell">0.3970</td></tr></tbody>
+          </table></div>
+        <p class="protocol">Twenty rollouts per task. Avg. gives equal weight to Easy (28 tasks), Medium (11), Hard (6), and Very Hard (5). MorphAct scores average three selected evaluations. Var. is the sample variance of their overall scores (pp²); baseline variance is unreported. Bold marks the best score within each backbone, including ties.</p>
+      </details>
+    </div>
       <div class="benchmark-panel" id="panel-libero" role="region" aria-labelledby="libero-title">
       <div class="benchmark-heading"><div><h3 id="libero-title">LIBERO</h3><p>40 tasks · 4 suites · 2,000 rollouts per evaluation</p></div><p class="legend"><span class="baseline-key">Baseline</span><span class="ours-key">Baseline + MorphAct</span></p></div>
       <div class="benchmark-charts" data-charts="libero" hidden></div>
@@ -204,24 +245,6 @@
               <tr class="ours-row"><th scope="row" class="method-cell">MorphAct</th><td class="suite-cell">98.33</td><td class="suite-cell"><strong>99.67</strong></td><td class="suite-cell"><strong>98.87</strong></td><td class="suite-cell"><strong>97.53</strong></td><td class="mean-cell"><strong>98.60</strong></td><td class="variance-cell">0.0525</td></tr></tbody>
           </table></div>
         <p class="protocol">Each suite contains 10 tasks, evaluated with 50 rollouts per task and execution horizon H10. Mean averages the four suites. MorphAct scores average three selected evaluations. Var. is the sample variance of their overall scores (pp²); baseline variance is unreported. Bold marks the best score within each backbone, including ties.</p>
-      </details>
-    </div><div class="benchmark-panel" id="panel-metaworld" role="region" aria-labelledby="metaworld-title">
-      <div class="benchmark-heading"><div><h3 id="metaworld-title">Meta-World</h3><p>50 tasks · 4 difficulty groups · 1,000 rollouts per evaluation</p></div><p class="legend"><span class="baseline-key">Baseline</span><span class="ours-key">Baseline + MorphAct</span></p></div>
-      <div class="benchmark-charts" data-charts="metaworld" hidden></div>
-      <p class="benchmark-finding"><strong>Gains extend to harder tasks.</strong> π<sub>0</sub> improves Very Hard from 20.00% to 58.00%. π<sub>0.5</sub> improves Hard from 38.30% to 66.39%.</p>
-      <details class="results-details"><summary>All suite scores &amp; evaluation protocol <span aria-hidden="true">+</span></summary>
-        <p class="table-hint">Scroll to see every column <span aria-hidden="true">↔</span></p>
-        <div class="table-scroll" role="region" aria-label="Meta-World complete success rates" tabindex="0"><table class="results-table" data-benchmark="metaworld">
-            <caption>Success rate (%) · complete breakdown</caption>
-            <thead><tr><th scope="col">Backbone</th><th scope="col">Method</th><th scope="col">Easy</th><th scope="col">Medium</th><th scope="col">Hard</th><th scope="col">Very Hard</th><th scope="col">Avg.</th><th scope="col">Var. (pp²)</th></tr></thead>
-            <tbody><tr class="baseline-row"><th scope="rowgroup" rowspan="2" class="backbone-cell">X-VLA</th><th scope="row" class="method-cell">Baseline</th><td class="suite-cell">72.50</td><td class="suite-cell">46.36</td><td class="suite-cell">48.30</td><td class="suite-cell"><strong>55.00</strong></td><td class="mean-cell">55.54</td><td class="variance-cell">—</td></tr>
-              <tr class="ours-row"><th scope="row" class="method-cell">MorphAct</th><td class="suite-cell"><strong>83.99</strong></td><td class="suite-cell"><strong>58.18</strong></td><td class="suite-cell"><strong>55.28</strong></td><td class="suite-cell"><strong>55.00</strong></td><td class="mean-cell"><strong>63.11</strong></td><td class="variance-cell">1.8400</td></tr></tbody>
-            <tbody><tr class="baseline-row"><th scope="rowgroup" rowspan="2" class="backbone-cell">π<sub>0</sub></th><th scope="row" class="method-cell">Baseline</th><td class="suite-cell">77.90</td><td class="suite-cell">51.80</td><td class="suite-cell">53.30</td><td class="suite-cell">20.00</td><td class="mean-cell">50.75</td><td class="variance-cell">—</td></tr>
-              <tr class="ours-row"><th scope="row" class="method-cell">MorphAct</th><td class="suite-cell"><strong>82.44</strong></td><td class="suite-cell"><strong>71.36</strong></td><td class="suite-cell"><strong>56.39</strong></td><td class="suite-cell"><strong>58.00</strong></td><td class="mean-cell"><strong>67.05</strong></td><td class="variance-cell">0.6342</td></tr></tbody>
-            <tbody><tr class="baseline-row"><th scope="rowgroup" rowspan="2" class="backbone-cell">π<sub>0.5</sub></th><th scope="row" class="method-cell">Baseline</th><td class="suite-cell">70.50</td><td class="suite-cell">45.00</td><td class="suite-cell">38.30</td><td class="suite-cell">41.00</td><td class="mean-cell">48.70</td><td class="variance-cell">—</td></tr>
-              <tr class="ours-row"><th scope="row" class="method-cell">MorphAct</th><td class="suite-cell"><strong>85.77</strong></td><td class="suite-cell"><strong>59.85</strong></td><td class="suite-cell"><strong>66.39</strong></td><td class="suite-cell"><strong>45.67</strong></td><td class="mean-cell"><strong>64.42</strong></td><td class="variance-cell">0.3970</td></tr></tbody>
-          </table></div>
-        <p class="protocol">Twenty rollouts per task. Avg. gives equal weight to Easy (28 tasks), Medium (11), Hard (6), and Very Hard (5). MorphAct scores average three selected evaluations. Var. is the sample variance of their overall scores (pp²); baseline variance is unreported. Bold marks the best score within each backbone, including ties.</p>
       </details>
     </div>
     </section>
@@ -251,27 +274,6 @@
           </table></div><p class="protocol">Constant and Task-ID change only the generation condition, retaining normal policy inputs. VLM-only and Action-only disable generated updates in the other module. Unadapted keeps both generators and adapted action prediction; only its action generator receives pre-adaptation features. Mean averages the four suites.</p></details>
     </section>
 
-    <section id="analysis" class="section wrap" aria-labelledby="analysis-title">
-      <div class="section-heading"><div><h2 id="analysis-title">Why contextual updates matter</h2></div><div class="section-intro"><p>Shared adaptation can produce competing descent directions across manipulation contexts. The paper examines this interaction through gradient alignment and one-step transfer, measured at a fixed checkpoint.</p></div></div>
-      <div class="diagnostic-math math-grid">
-        <div><h3>Gradient alignment</h3><div class="equation"><math display="block" translate="no" aria-label="A task gradient is the gradient of the native loss with respect to module parameters. The task-pair alignment is the normalized inner product of two module gradients."><mtable columnalign="left" rowspacing="0.65em"><mtr><mtd><mrow><msubsup><mi>g</mi><mi>i</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>=</mo><mrow><msub><mo>∇</mo><msub><mi>θ</mi><mi>m</mi></msub></msub><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>U</mi><mi>i</mi></msub><mo>;</mo><mi>θ</mi><mo>)</mo></mrow></mrow></mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>=</mo><mfrac><mrow><mo>⟨</mo><msubsup><mi>g</mi><mi>i</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>,</mo><msubsup><mi>g</mi><mi>j</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>⟩</mo></mrow><mrow><msub><mrow><mo>‖</mo><msubsup><mi>g</mi><mi>i</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>‖</mo></mrow><mn>2</mn></msub><msub><mrow><mo>‖</mo><msubsup><mi>g</mi><mi>j</mi><mrow><mo>(</mo><mi>m</mi><mo>)</mo></mrow></msubsup><mo>‖</mo></mrow><mn>2</mn></msub></mrow></mfrac></mrow></mtd></mtr></mtable></math></div><p class="math-caption">For module <i>m</i>, negative cosine indicates competing local descent directions across task batches.</p></div>
-        <div><h3>One-step transfer</h3><div class="equation"><math display="block" translate="no" aria-label="A source update takes a gradient step from the shared checkpoint. Transfer affinity is one minus the target loss after the update divided by the target loss before it."><mtable columnalign="left" rowspacing="0.65em"><mtr><mtd><mrow><msubsup><mi>θ</mi><mi>i</mi><mo>+</mo></msubsup><mo>=</mo><mrow><mi>θ</mi><mo>−</mo><mi>η</mi><msub><mo>∇</mo><mi>θ</mi></msub><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>U</mi><mi>i</mi></msub><mo>;</mo><mi>θ</mi><mo>)</mo></mrow></mrow></mrow></mtd></mtr><mtr><mtd><mrow><msub><mi>Z</mi><mrow><mi>i</mi><mo>→</mo><mi>j</mi></mrow></msub><mo>=</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>V</mi><mi>j</mi></msub><mo>;</mo><msubsup><mi>θ</mi><mi>i</mi><mo>+</mo></msubsup><mo>)</mo></mrow></mrow><mrow><mi>ℒ</mi><mrow><mo>(</mo><msub><mi>V</mi><mi>j</mi></msub><mo>;</mo><mi>θ</mi><mo>)</mo></mrow></mrow></mfrac></mrow></mrow></mtd></mtr></mtable></math></div><p class="math-caption">A positive transfer score reduces the target loss; a negative score increases it. Every source update starts from the same checkpoint.</p></div>
-      </div>
-      <div class="diagnostic-lead"><figure class="paper-figure">
-      <a class="figure-link" data-lightbox data-figure-title="Gradient conflict and one-step transfer" href="assets/paper/diagnostic-summary.png" target="_blank" rel="noopener" aria-label="Enlarge Gradient conflict and one-step transfer">
-        <img src="assets/paper/diagnostic-summary.png" width="1980" height="765" loading="lazy" decoding="async" alt="At a fixed checkpoint, within-task versus cross-task gradient-conflict rates are 38.94 versus 47.80 percent for VLM and 42.69 versus 48.28 for Action. All 260 source-improving updates increase loss on some other sampled tasks.">
-      </a><figcaption><span><strong>Gradient compatibility, one-step transfer, and cancellation.</strong> Diagnostics at one fixed checkpoint, using sampled losses and gradients.</span></figcaption>
-    </figure><p class="diagnostic-notes"><strong>All 260 source-improving updates increase loss on other sampled tasks.</strong> Cross-task gradient conflict and cancellation are higher in both the VLM and action module. These measurements examine local losses at one fixed checkpoint.</p></div>
-      <div class="diagnostic-grid"><div><h3>Where conflict concentrates</h3><figure class="paper-figure">
-      <a class="figure-link" data-lightbox data-figure-title="Where negative contributions concentrate" href="assets/paper/negative-contributions.png" target="_blank" rel="noopener" aria-label="Enlarge Where negative contributions concentrate">
-        <img src="assets/paper/negative-contributions.png" width="2340" height="1105" loading="lazy" decoding="async" alt="Paper chart of pooled negative cross-task contribution shares by VLM and action parameter group, including the five largest groups and the remaining groups combined.">
-      </a><figcaption><span>Shares describe normalized negative contribution mass, not parameter counts.</span></figcaption>
-    </figure><p class="figure-reading">The action groups outside Transformer blocks, block 00, and block 11 account for <strong>78.88%</strong> of pooled negative contribution before rounding. Together, these groups contribute most of the measured negative mass on the action side.</p></div><div><h3>How it varies with depth</h3><figure class="paper-figure">
-      <a class="figure-link" data-lightbox data-figure-title="Conflict across model depth" href="assets/paper/depth-profiles.png" target="_blank" rel="noopener" aria-label="Enlarge Conflict across model depth">
-        <img src="assets/paper/depth-profiles.png" width="2340" height="1835" loading="lazy" decoding="async" alt="Six paper plots compare cross-task and within-task negative-cosine frequency and mean negative part across the vision, language, and action Transformer blocks.">
-      </a><figcaption><span>Complete depth profiles. The lower panels use independent y-axis scales.</span></figcaption>
-    </figure></div></div>
-    </section>
 
     <section id="real-world" class="section wrap" aria-labelledby="real-world-title">
       <div class="section-heading"><div><h2 id="real-world-title">Real-world manipulation</h2></div><div class="section-intro"><p>MorphAct improves π<sub>0.5</sub> on all four physical tasks by <strong>8–14%</strong>. Each method is evaluated over 50 physical rollouts per task.</p><p>The paired demonstrations show separate trials at equal playback speed within each task; the scores summarize the full evaluations.</p></div></div>
