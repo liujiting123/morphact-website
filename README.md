@@ -20,10 +20,10 @@ GitHub Pages publishes the repository root on `main`. `.nojekyll` preserves the 
 
 - `index.html`: research narrative, native MathML equations, task videos, result values, and resource controls.
 - `styles.css`: article typography, figure and equation layouts, and basic responsive styling.
-- `script.js`: keyboard-accessible benchmark tabs, section navigation, and figure zoom. Both benchmarks and direct image links remain available without JavaScript.
+- `script.js`: suite-level benchmark charts, metric and benchmark switches, ablation suite selection, figure zoom, and task video dialogs. Chart values are read from the manuscript tables in `index.html`; there is no second numerical dataset to synchronize. Both benchmarks, expandable tables, and direct media links remain available without JavaScript.
 - `assets/`: manuscript figures, emblem, institution logos, and video exports.
 
-The homepage introduces contextual adaptation and the paper method figure, then presents simulation results, ablations, and real-world experiments. Prose and compact equations use a reading column; paper figures, tables, and demonstrations use a wider canvas. Longer training equations are in a disclosure. Equations use native MathML and need no external rendering library. Keep their accessible `aria-label` text consistent with the mathematical markup when editing them.
+The homepage pairs a compact research introduction with the demo, then presents the idea, simulation results, method, ablations, gradient diagnostics, and real-world experiments. The editorial layout places short explanations alongside wider paper figures and charts. Success charts use a zero-based 0–100% scale; gain charts share a scale across the three backbones within each benchmark and retain negative changes and ties. Complete numerical tables and longer training equations remain in disclosures. Equations use native MathML and need no external rendering library. Keep their accessible `aria-label` text consistent with the mathematical markup when editing them.
 
 The arXiv and Code controls are deliberately disabled and have no destination. Replace each with an anchor when the corresponding public URL is ready. Author order, affiliation numbers, equal-contribution marks, and corresponding-author marks are maintained in the `.paper-credits` block of `index.html`. Institution logo sources are listed in `assets/institutions/README.md`.
 
@@ -37,12 +37,22 @@ The teaser is a direct 144-dpi render of the manuscript figure `figures/morphact
 
 `assets/morphact-method.png` is a direct 144-dpi render of the current `figures/method.pdf` (2662 × 1331 pixels). Its original PDF is included as `assets/morphact-method.pdf`. The figure includes joint learning and chunk-level reuse; the older `morphact-overview.png` is retained but is no longer displayed.
 
+The analysis section uses three additional figures actually included in the current manuscript. PNGs in `assets/paper/` are direct 360-dpi renders; their accompanying PDFs match the source files byte for byte.
+
+| Website asset | Manuscript figure | PNG dimensions |
+| --- | --- | --- |
+| `diagnostic-summary` | `figures/diagnostic-summary.pdf`, Figure 2 | 1980 × 765 |
+| `negative-contributions` | `figures/diagnostic-contributions.pdf`, Figure 5 | 2340 × 1105 |
+| `depth-profiles` | `figures/diagnostic-depth-profiles.pdf`, Figure 6 | 2340 × 1835 |
+
+The diagnostics measure sampled gradients and local losses at one fixed checkpoint. Negative contribution shares and group-local cosine profiles have different normalizations; neither is a closed-loop success rate. Captions follow `sections/motivation.tex` and `sections/appendix.tex`.
+
 ## Real-world demo
 
-The 63-second real-world demo appears immediately below the paper header. `assets/morphact-demo-light-v14.mp4` is the 1080p, 30 fps light edition; its matching JPEG poster shows the paired robots at 6 seconds. The light edition recomposes the v14 timeline on the page's cream background, with green/purple titles. Robot footage receives no color filter. Completion markers, playback speeds, detail replays, and transition timing are preserved. The opening method segment uses the current paper figure. Original dark exports remain available in `assets/`.
+The 63-second real-world demo appears beside the paper introduction on desktop and below it on mobile. `assets/morphact-demo-light-v14.mp4` is the 1080p, 30 fps light edition; its matching JPEG poster shows the paired robots at 6 seconds. The light edition recomposes the v14 timeline on a cream background, with green/purple titles. Robot footage receives no color filter. Completion markers, playback speeds, detail replays, and transition timing are preserved. The opening method segment uses the current paper figure. Original dark exports remain available in `assets/`.
 
-The real-world section uses the manuscript names: Sort Letters, Deliver Water, Sort Hardware, and Cabinet Storage. Their paired 9-second overview clips are 720p encodes of the light v14 segments. Asset sources and playback speeds are recorded in `assets/demos/README.md`. Each pair contains separate MorphAct and π0.5 trials with equal playback speed within that task. Success rates reproduce the matching four tasks in `sections/experiments.tex`, each evaluated over 50 physical rollouts per method; they do not describe only the displayed clip.
+The real-world section follows the manuscript order: Sort Letters, Sort Hardware, Deliver Water, and Cabinet Storage. Task images in `assets/paper/` copy the current `real-world-panel-000`, `002`, and `003` files without modification; `sort-hardware.png` reproduces the paper's 112-pixel bottom crop of panel `001`. The older website task images remain stored but are not displayed. Each task opens its paired 9-second 720p light v14 clip in a native dialog, with direct video links as the fallback. Asset sources and playback speeds are recorded in `assets/demos/README.md`. Each pair contains separate MorphAct and π0.5 trials with equal playback speed within that task. Success rates reproduce the matching four tasks in `sections/experiments.tex`, each evaluated over 50 physical rollouts per method; they do not describe only the displayed clip.
 
 `tools/render_light_demo.py` rebuilds the light edition from the existing local v12/v14 projects and current manuscript. It requires an existing FFmpeg and Python/Pillow runtime. Its verification decodes all five outputs and compares the recomposed footage regions with the source. Review intermediates are written outside the site in `/tmp/morphact-light-demo`.
 
-To update the video, add the new video and poster assets and update `src` and `poster` on `#demo-video` in `index.html`. Use versioned asset names so visitors receive the current video. Keep `controls` and `playsinline`; playback starts only when the visitor chooses to play. The video uses `object-fit: contain`, so the recording is shown without cropping.
+To update the video, add the new video and poster assets and update `src` and `poster` on `#demo-video` in `index.html`. Use versioned asset names so visitors receive the current video. Keep `controls` and `playsinline` in the HTML fallback. JavaScript shows a play button over the initial poster and reveals the native controls when playback starts. Playback starts only when the visitor chooses to play. Videos use `object-fit: contain`, so recordings are shown without cropping; closing a task dialog pauses and unloads its video.
