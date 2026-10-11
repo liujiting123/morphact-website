@@ -3,14 +3,15 @@ const escapeText = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;'
 const signed = value => `${value > 0.005 ? '+' : value < -0.005 ? '−' : ''}${Math.abs(value).toFixed(2)}%`;
 function pairedColumns(labels, model, benchmark) {
   const width=380, left=36, bottom=273, top=61, plotHeight=bottom-top, step=82;
-  const min = benchmark === 'libero' ? 84 : 0;
-  const y = value => bottom-(value-min)/(100-min)*plotHeight;
+  const min = benchmark === 'libero' ? 84 : 15;
+  const max = benchmark === 'libero' ? 100 : 90;
+  const y = value => bottom-(value-min)/(max-min)*plotHeight;
   const gains = labels.map((_,i)=>model.ours[i]-model.baseline[i]);
   const highlightIndex = gains.indexOf(Math.max(...gains));
   const description=labels.map((label,i)=>`${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%, gain ${signed(model.ours[i]-model.baseline[i])}`).join('. ');
-  let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 320" data-min="${min}" data-max="100" role="img" aria-label="${escapeText(model.text+'. Displayed y-axis range '+min+' to 100 percent. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text><text class="axis-range" x="364" y="45" text-anchor="end">${min}–100%</text>`;
+  let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 320" data-min="${min}" data-max="${max}" role="img" aria-label="${escapeText(model.text+'. Displayed y-axis range '+min+' to '+max+' percent. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text><text class="axis-range" x="364" y="45" text-anchor="end">${min}–${max}%</text>`;
   svg+=`<rect x="${left+step*highlightIndex}" y="51" width="${step}" height="246" rx="3" class="suite-highlight"/>`;
-  for(const tick of (min === 84 ? [84,88,92,96,100] : [0,25,50,75,100])) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
+  for(const tick of (min === 84 ? [84,88,92,96,100] : [15,30,45,60,75,90])) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
   if (min > 0) svg+=`<path class="axis-break" d="M ${left-5} ${bottom+6} l 8 -4 m -8 8 l 8 -4"/>`;
   labels.forEach((label,i)=>{
     const center=left+step*(i+.5), baselineX=center-29, oursX=center+4, barWidth=25;
@@ -44,11 +45,13 @@ const ablationRows=[...document.querySelector('.ablation-table').tBodies[0].rows
 for(const container of document.querySelectorAll('[data-ablation-chart]')) {
   const index=Number(container.dataset.ablationChart), suite=index===4?'Mean':'Long';
   const width=580,left=37,bottom=275,top=48,plotHeight=bottom-top,step=88;
-  const y=value=>bottom-value/100*plotHeight;
+  const min=30, max=100;
+  const y=value=>bottom-(value-min)/(max-min)*plotHeight;
   const names=ablationRows.map(row=>row.querySelector('th').childNodes[0].textContent.trim());
   const values=ablationRows.map(row=>Number(row.querySelectorAll('td')[index].textContent));
-  let svg=`<svg class="ablation-chart" viewBox="0 0 ${width} 331" role="img" aria-label="${escapeText('X-VLA LIBERO '+suite+'. '+names.map((n,i)=>`${n}: ${values[i].toFixed(2)}%`).join('. '))}"><title>X-VLA LIBERO ${suite} ablation success rates</title><text class="axis-title" x="3" y="17">Success (%)</text>`;
-  for(const tick of [0,25,50,75,100]) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*6}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+4}" text-anchor="end">${tick}</text>`;
+  let svg=`<svg class="ablation-chart" viewBox="0 0 ${width} 331" data-min="${min}" data-max="${max}" role="img" aria-label="${escapeText('X-VLA LIBERO '+suite+'. Displayed y-axis range 30 to 100 percent. '+names.map((n,i)=>`${n}: ${values[i].toFixed(2)}%`).join('. '))}"><title>X-VLA LIBERO ${suite} ablation success rates</title><text class="axis-title" x="3" y="17">Success (%)</text><text class="axis-range" x="565" y="17" text-anchor="end">30–100%</text>`;
+  for(const tick of [30,40,50,60,70,80,90,100]) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*6}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+4}" text-anchor="end">${tick}</text>`;
+  svg+=`<path class="axis-break" d="M ${left-5} ${bottom+6} l 8 -4 m -8 8 l 8 -4"/>`;
   names.forEach((name,i)=>{
     const center=left+step*(i+.5), lines=name==='VLM-only'?['VLM','only']:name==='Action-only'?['Action','only']:[name];
     svg+=`<g><title>${escapeText(`${name}: ${values[i].toFixed(2)}%`)}</title><rect class="${i===0?'bar-ours':'bar-baseline'}" data-value="${values[i]}" x="${center-24}" y="${y(values[i])}" width="48" height="${bottom-y(values[i])}" rx="1"/><text class="ablation-value${i===0?' ours-value':''}" x="${center}" y="${y(values[i])-9}" text-anchor="middle">${values[i].toFixed(2)}</text><text class="variant-label${i===0?' ours-value':''}" x="${center}" y="298" text-anchor="middle">${lines.map((t,j)=>`<tspan x="${center}" dy="${j?16:0}">${escapeText(t)}</tspan>`).join('')}</text></g>`;

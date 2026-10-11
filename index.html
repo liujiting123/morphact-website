@@ -13,8 +13,8 @@
   <meta property="og:image:alt" content="MorphAct generates context-dependent parameter updates through a shared adaptation rule.">
   <title>MorphAct: Contextual Parameterization of Vision–Language–Action Models</title>
   <link rel="icon" type="image/svg+xml" href="assets/morphact.svg">
-  <link rel="stylesheet" href="styles.css?v=13">
-  <script src="script.js?v=7" defer></script>
+  <link rel="stylesheet" href="styles.css?v=14">
+  <script src="script.js?v=8" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -184,7 +184,7 @@
         <p class="protocol">Twenty rollouts per task. Avg. gives equal weight to Easy (28 tasks), Medium (11), Hard (6), and Very Hard (5). MorphAct scores average three selected evaluations. Var. is the sample variance of their overall scores (pp²); baseline variance is unreported. Bold marks the best score within each backbone, including ties.</p>
       </details>
     </div>
-      <p class="chart-note">Success rate (%) ↑ · LIBERO shows the 84–100% range; Meta-World shows 0–100%. Dark badges identify the largest absolute gain for each evaluated model.</p>
+      <p class="chart-note">Success rate (%) ↑ · LIBERO shows the 84–100% range; Meta-World shows 15–90%. Dark badges identify the largest absolute gain for each evaluated model.</p>
     </section>
 
     <section id="ablations" class="section wrap" aria-labelledby="ablations-title">
@@ -194,7 +194,7 @@
         <figure class="ablation-chart-panel"><h3>Mean over all suites</h3><div data-ablation-chart="4"></div></figure>
         <figure class="ablation-chart-panel"><h3>Long-horizon tasks</h3><div data-ablation-chart="3"></div></figure>
       </div>
-      <p class="ablation-legend legend"><span class="ours-key">MorphAct</span><span class="baseline-key">Ablated variant</span></p>
+      <p class="ablation-legend legend"><span class="ours-key">MorphAct</span><span class="baseline-key">Ablated variant</span></p><p class="ablation-scale-note">Success rate (%) · Both panels show the 30–100% range.</p>
       <div class="ablation-findings"><article><div><h3>Context beyond task identity <b>+8.95%</b></h3><p>Mean success reaches 97.20% with current context, versus 88.25% for Task-ID and 87.50% for a constant condition.</p></div></article><article><div><h3>Adapt both modules</h3><p>Action-only reaches 81.00%; VLM-only, 43.50%. Adding upstream adaptation raises Action-only to 86.00%, even before coupling.</p></div></article><article><div><h3>Couple through adapted features <b>+11.20%</b></h3><p>Using adapted features to generate action updates raises mean success from 86.00% to 97.20%. On Long, the gain is <strong>+21.60%</strong>.</p></div></article></div>
       <details class="results-details"><summary>All ablation scores &amp; controlled changes <span aria-hidden="true">+</span></summary><p class="table-hint">Scroll to see every column ↔</p><div class="table-scroll" role="region" aria-label="Full X-VLA ablation results" tabindex="0"><table class="results-table ablation-table" data-benchmark="ablations">
             <caption>X-VLA ablations on LIBERO · success rate (%)</caption>
