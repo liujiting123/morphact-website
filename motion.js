@@ -9,7 +9,9 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const easing = 'cubic-bezier(.22, .61, .36, 1)';
   const entryBlocks = [...document.querySelectorAll(
-    '.section-heading, .method-figure, .benchmark-panel, .ablation-charts, .diagnostic-lead'
+    '#paper-title, .hero-lead, .paper-credits, .institution-logos, .resource-links, ' +
+    '.demo-section > figure, .section-heading, .paper-figure, .benchmark-panel, ' +
+    '.ablation-charts, .task-card'
   )];
   const entered = new Set();
   const entryAnimations = new Map();
@@ -30,17 +32,18 @@
     const observer = new IntersectionObserver(entries => {
       if (entryObserver !== observer || document.hidden || reducedMotion.matches) return;
       for (const entry of entries) {
-        if (!entry.isIntersecting || entered.has(entry.target)) continue;
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.16 || entered.has(entry.target)) continue;
         const block = entry.target;
         entered.add(block);
         observer.unobserve(block);
         // Keyboard navigation always gets the block in its resting position.
         if (block.contains(document.activeElement)) continue;
         const restingTransform = getComputedStyle(block).transform;
+        const delay = block.closest('.hero') ? Math.min(entryBlocks.indexOf(block) * 85, 255) : 0;
         const animation = block.animate([
-          { opacity: 0.78, transform: `translateY(8px) ${restingTransform === 'none' ? '' : restingTransform}` },
+          { opacity: 0.12, transform: `translateY(28px) ${restingTransform === 'none' ? '' : restingTransform}` },
           { opacity: 1, transform: restingTransform }
-        ], { duration: 560, easing, fill: 'none' });
+        ], { duration: 850, delay, easing, fill: 'backwards' });
         entryAnimations.set(block, animation);
         animation.onfinish = () => entryAnimations.delete(block);
       }
@@ -48,7 +51,7 @@
         observer.disconnect();
         entryObserver = null;
       }
-    }, { threshold: 0.12, rootMargin: '0px 0px -24px 0px' });
+    }, { threshold: 0.16, rootMargin: '0px 0px -80px 0px' });
     entryObserver = observer;
     for (const block of entryBlocks) {
       if (!entered.has(block)) observer.observe(block);
