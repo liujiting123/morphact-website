@@ -3,14 +3,14 @@ const escapeText = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;'
 const signed = value => `${value > 0.005 ? '+' : value < -0.005 ? '−' : ''}${Math.abs(value).toFixed(2)}%`;
 function pairedColumns(labels, model, benchmark) {
   const width=380, left=36, bottom=273, top=61, plotHeight=bottom-top, step=82;
-  const min = benchmark === 'libero' ? 80 : 0;
+  const min = benchmark === 'libero' ? 84 : 0;
   const y = value => bottom-(value-min)/(100-min)*plotHeight;
   const gains = labels.map((_,i)=>model.ours[i]-model.baseline[i]);
   const highlightIndex = gains.indexOf(Math.max(...gains));
   const description=labels.map((label,i)=>`${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%, gain ${signed(model.ours[i]-model.baseline[i])}`).join('. ');
   let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 320" data-min="${min}" data-max="100" role="img" aria-label="${escapeText(model.text+'. Displayed y-axis range '+min+' to 100 percent. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text><text class="axis-range" x="364" y="45" text-anchor="end">${min}–100%</text>`;
   svg+=`<rect x="${left+step*highlightIndex}" y="51" width="${step}" height="246" rx="3" class="suite-highlight"/>`;
-  for(const tick of (min === 80 ? [80,85,90,95,100] : [0,25,50,75,100])) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
+  for(const tick of (min === 84 ? [84,88,92,96,100] : [0,25,50,75,100])) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
   if (min > 0) svg+=`<path class="axis-break" d="M ${left-5} ${bottom+6} l 8 -4 m -8 8 l 8 -4"/>`;
   labels.forEach((label,i)=>{
     const center=left+step*(i+.5), baselineX=center-29, oursX=center+4, barWidth=25;
