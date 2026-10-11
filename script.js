@@ -1,112 +1,52 @@
-// The manuscript tables are the single source of numbers for the interactive charts.
-// Without JavaScript, both benchmarks, their tables, and the media links remain available.
-const escapeText = (value) => String(value).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const signed = (value) => `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value).toFixed(2)}%`;
-const benchmarkData = new Map();
-for (const table of document.querySelectorAll('.results-table:not(.ablation-table)')) {
-  const labels = [...table.querySelectorAll('thead th')].slice(2,7).map(cell => cell.textContent.trim());
-  const backbones = [...table.tBodies].map(group => {
-    const rows = [...group.rows];
-    const scores = row => [...row.querySelectorAll('.suite-cell, .mean-cell')].map(cell => Number(cell.textContent.trim()));
-    return {name: rows[0].querySelector('.backbone-cell').innerHTML, text: rows[0].querySelector('.backbone-cell').textContent, baseline: scores(rows[0]), ours: scores(rows[1])};
-  });
-  benchmarkData.set(table.dataset.benchmark, {labels, backbones});
-}
-let chartMetric = 'success';
-function benchmarkSVG(data, model, metric) {
-  const plotWidth = 232;
-  const differences = data.backbones.flatMap(m => m.ours.map((v,i) => v-m.baseline[i]));
-  const min = metric === 'success' ? 0 : Math.min(0, Math.floor(Math.min(...differences)));
-  const max = metric === 'success' ? 100 : Math.ceil(Math.max(...differences)/10)*10;
-  const x = value => (value-min)/(max-min)*plotWidth;
-  const ticks = metric === 'success' ? [0,50,100] : [min, ...(min < 0 ? [0] : []), max/2, max];
-  const title = `${model.text}: ${metric === 'success' ? 'success rate' : 'absolute gain over baseline'}`;
-  const description = data.labels.map((label,i) => `${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%, gain ${signed(model.ours[i]-model.baseline[i])}`).join('. ');
-  let svg = `<svg class="benchmark-chart" viewBox="-8 -2 307 284" role="img" aria-label="${escapeText(title+'. '+description)}"><title>${escapeText(title)}</title><desc>${escapeText(description)}</desc>`;
-  svg += '<rect x="-7" y="206" width="306" height="49" rx="3" fill="#f0f4ec"/>';
-  for (const tick of ticks) {
-    svg += `<line class="${tick === 0 ? 'chart-zero' : 'chart-gridline'}" x1="${x(tick)}" x2="${x(tick)}" y1="17" y2="255"/>`;
-    svg += `<text class="tick-label" x="${x(tick)}" y="275" text-anchor="${tick === min ? 'start' : tick === max ? 'end' : 'middle'}">${tick}${metric === 'success' ? '%' : ''}</text>`;
-  }
-  data.labels.forEach((label,i) => {
-    const y = i*52;
-    const gain = model.ours[i]-model.baseline[i];
-    svg += `<g><title>${escapeText(`${label}: ${model.baseline[i].toFixed(2)}% → ${model.ours[i].toFixed(2)}% (${signed(gain)})`)}</title><text class="suite-label" x="0" y="${y+10}"${i === 4 ? ' font-weight="600"' : ''}>${escapeText(label)}</text><text class="gain-label${gain < -0.005 ? ' negative-label' : ''}" x="290" y="${y+10}" text-anchor="end">${signed(gain)}</text>`;
-    if (metric === 'success') {
-      svg += `<rect class="bar-baseline" x="0" y="${y+19}" width="${x(model.baseline[i])}" height="7" rx="1"/><text class="bar-value" x="290" y="${y+26}" text-anchor="end">${model.baseline[i].toFixed(2)}</text><rect class="bar-ours" x="0" y="${y+31}" width="${x(model.ours[i])}" height="9" rx="1"/><text class="bar-value ours-value" x="290" y="${y+40}" text-anchor="end">${model.ours[i].toFixed(2)}</text>`;
-    } else {
-      svg += `<rect class="${gain < -0.005 ? 'bar-negative' : 'bar-ours'}" x="${Math.min(x(0),x(gain))}" y="${y+23}" width="${Math.abs(x(gain)-x(0))}" height="13" rx="1"/>`;
-      if (Math.abs(gain) < 0.005) svg += `<circle cx="${x(0)}" cy="${y+29.5}" r="2.5" fill="#7f8e79"/>`;
-    }
-    svg += '</g>';
+// Plot the manuscript tables directly. Both benchmarks are always visible.
+const escapeText = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const signed = value => `${value > 0.005 ? '+' : value < -0.005 ? '−' : ''}${Math.abs(value).toFixed(2)}%`;
+function pairedColumns(labels, model) {
+  const width=380, left=36, bottom=273, top=61, plotHeight=bottom-top, step=82;
+  const y = value => bottom-value/100*plotHeight;
+  const description=labels.map((label,i)=>`${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%, gain ${signed(model.ours[i]-model.baseline[i])}`).join('. ');
+  let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 312" role="img" aria-label="${escapeText(model.text+'. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text>`;
+  svg+=`<rect x="${left+step*3}" y="51" width="${step}" height="246" rx="3" class="suite-highlight"/>`;
+  for(const tick of [0,25,50,75,100]) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
+  labels.forEach((label,i)=>{
+    const center=left+step*(i+.5), baselineX=center-29, oursX=center+4, barWidth=25;
+    const gain=model.ours[i]-model.baseline[i], positive=gain>0.005, negative=gain < -0.005;
+    const description=`${label}: ${model.baseline[i].toFixed(2)}% → ${model.ours[i].toFixed(2)}% (${signed(gain)})`;
+    svg+=`<g class="suite-group"><title>${escapeText(description)}</title><rect class="gain-bg${negative?' negative-bg':''}${!positive&&!negative?' neutral-bg':''}" x="${center-33}" y="9" width="66" height="23" rx="3"/><text class="gain-label${negative?' negative-label':''}${!positive&&!negative?' neutral-label':''}" x="${center}" y="25" text-anchor="middle">${signed(gain)}</text>`;
+    svg+=`<rect class="bar-baseline" data-value="${model.baseline[i]}" x="${baselineX}" y="${y(model.baseline[i])}" width="${barWidth}" height="${bottom-y(model.baseline[i])}" rx="1"/><rect class="bar-ours" data-value="${model.ours[i]}" x="${oursX}" y="${y(model.ours[i])}" width="${barWidth}" height="${bottom-y(model.ours[i])}" rx="1"/>`;
+    svg+=`<text class="bar-value baseline-value" x="${baselineX+barWidth/2}" y="${y(model.baseline[i])-7}" text-anchor="middle">${model.baseline[i].toFixed(2)}</text><text class="bar-value ours-value" x="${oursX+barWidth/2}" y="${y(model.ours[i])-7}" text-anchor="middle">${model.ours[i].toFixed(2)}</text>`;
+    if(label==='Very Hard') svg+=`<text class="suite-label" x="${center}" y="292" text-anchor="middle"><tspan x="${center}">Very Hard</tspan></text>`;
+    else svg+=`<text class="suite-label" x="${center}" y="292" text-anchor="middle">${escapeText(label)}</text>`;
+    svg+='</g>';
   });
   return svg+'</svg>';
 }
-function renderBenchmarks() {
-  for (const [key,data] of benchmarkData) {
-    const container = document.querySelector(`[data-charts="${key}"]`);
-    container.innerHTML = data.backbones.map(model => `<article class="backbone-chart"><div class="backbone-heading"><h4>${model.name}</h4><span class="mean-gain">${signed(model.ours[4]-model.baseline[4])}</span></div><p class="backbone-summary">${model.baseline[4].toFixed(2)}<span class="score-arrow" aria-hidden="true">→</span><strong>${model.ours[4].toFixed(2)}%</strong><small>${data.labels[4].toLowerCase()} success</small></p>${benchmarkSVG(data,model,chartMetric)}</article>`).join('');
-    container.hidden = false;
-    document.querySelector(`#panel-${key} .legend`).innerHTML = chartMetric === 'success'
-      ? '<span class="baseline-key">Baseline</span><span class="ours-key">+ MorphAct</span>'
-      : '<span class="ours-key">Improvement</span><span class="negative-key">Decline</span>';
-  }
-  document.querySelector('#results > .chart-note').textContent = chartMetric === 'success' ? 'Success rates use a 0–100% scale. Displayed gains are absolute success-rate differences.' : 'Gain scales are shared across backbones within each benchmark. Gains are absolute success-rate differences; negative changes extend left of zero.';
+for(const table of document.querySelectorAll('.results-table:not(.ablation-table)')) {
+  const labels=[...table.querySelectorAll('thead th')].slice(2,6).map(c=>c.textContent.trim());
+  const container=document.querySelector(`[data-charts="${table.dataset.benchmark}"]`);
+  container.innerHTML=[...table.tBodies].map(group=>{
+    const [base,ours]=group.rows;
+    const scores=row=>[...row.querySelectorAll('.suite-cell,.mean-cell')].map(c=>Number(c.textContent.trim()));
+    const model={name:base.querySelector('.backbone-cell').innerHTML,text:base.querySelector('.backbone-cell').textContent,baseline:scores(base),ours:scores(ours)};
+    return `<figure class="backbone-chart"><h4>${model.name}</h4><p class="backbone-summary"><span>${model.baseline[4].toFixed(2)}</span><span class="score-arrow" aria-hidden="true">→</span><strong>${model.ours[4].toFixed(2)}%</strong><b>${signed(model.ours[4]-model.baseline[4])}</b></p><p class="mean-label">Overall success</p>${pairedColumns(labels,model)}</figure>`;
+  }).join('');
+  container.hidden=false;
 }
-renderBenchmarks();
-const metricControls = document.querySelector('.chart-modes');
-metricControls.hidden = false;
-metricControls.addEventListener('click', event => {
-  const button = event.target.closest('[data-metric]');
-  if (!button) return;
-  chartMetric = button.dataset.metric;
-  metricControls.querySelectorAll('button').forEach(control => control.setAttribute('aria-pressed', String(control === button)));
-  renderBenchmarks();
-});
-const tabList = document.querySelector('[role="tablist"]');
-const tabs = [...tabList.querySelectorAll('[role="tab"]')];
-function selectBenchmark(selectedTab) {
-  for (const tab of tabs) {
-    const active = tab === selectedTab;
-    tab.setAttribute('aria-selected', String(active));
-    tab.tabIndex = active ? 0 : -1;
-    document.getElementById(tab.getAttribute('aria-controls')).hidden = !active;
-  }
-}
-tabList.hidden = false;
-selectBenchmark(tabs[0]);
-for (const tab of tabs) {
-  tab.addEventListener('click', () => selectBenchmark(tab));
-  tab.addEventListener('keydown', event => {
-    const index = tabs.indexOf(tab);
-    let next;
-    if (event.key === 'ArrowRight') next = (index+1)%tabs.length;
-    else if (event.key === 'ArrowLeft') next = (index-1+tabs.length)%tabs.length;
-    else if (event.key === 'Home') next = 0;
-    else if (event.key === 'End') next = tabs.length-1;
-    else return;
-    event.preventDefault();
-    selectBenchmark(tabs[next]);
-    tabs[next].focus();
+const ablationRows=[...document.querySelector('.ablation-table').tBodies[0].rows];
+for(const container of document.querySelectorAll('[data-ablation-chart]')) {
+  const index=Number(container.dataset.ablationChart), suite=index===4?'Mean':'Long';
+  const width=580,left=37,bottom=275,top=48,plotHeight=bottom-top,step=88;
+  const y=value=>bottom-value/100*plotHeight;
+  const names=ablationRows.map(row=>row.querySelector('th').childNodes[0].textContent.trim());
+  const values=ablationRows.map(row=>Number(row.querySelectorAll('td')[index].textContent));
+  let svg=`<svg class="ablation-chart" viewBox="0 0 ${width} 331" role="img" aria-label="${escapeText('X-VLA LIBERO '+suite+'. '+names.map((n,i)=>`${n}: ${values[i].toFixed(2)}%`).join('. '))}"><title>X-VLA LIBERO ${suite} ablation success rates</title><text class="axis-title" x="3" y="17">Success (%)</text>`;
+  for(const tick of [0,25,50,75,100]) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*6}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+4}" text-anchor="end">${tick}</text>`;
+  names.forEach((name,i)=>{
+    const center=left+step*(i+.5), lines=name==='VLM-only'?['VLM','only']:name==='Action-only'?['Action','only']:[name];
+    svg+=`<g><title>${escapeText(`${name}: ${values[i].toFixed(2)}%`)}</title><rect class="${i===0?'bar-ours':'bar-baseline'}" data-value="${values[i]}" x="${center-24}" y="${y(values[i])}" width="48" height="${bottom-y(values[i])}" rx="1"/><text class="ablation-value${i===0?' ours-value':''}" x="${center}" y="${y(values[i])-9}" text-anchor="middle">${values[i].toFixed(2)}</text><text class="variant-label${i===0?' ours-value':''}" x="${center}" y="298" text-anchor="middle">${lines.map((t,j)=>`<tspan x="${center}" dy="${j?16:0}">${escapeText(t)}</tspan>`).join('')}</text></g>`;
   });
+  container.innerHTML=svg+'</svg>';
 }
-const ablationTable = document.querySelector('.ablation-table');
-const ablationRows = [...ablationTable.tBodies[0].rows];
-const ablationSelect = document.getElementById('ablation-suite');
-const ablationChart = document.getElementById('ablation-chart');
-function renderAblation() {
-  const index = Number(ablationSelect.value);
-  const suite = ablationSelect.selectedOptions[0].textContent;
-  ablationChart.innerHTML = ablationRows.map((row,i) => {
-    const name = row.querySelector('th').childNodes[0].textContent.trim();
-    const score = Number(row.querySelectorAll('td')[index].textContent);
-    return `<div class="ablation-row${i === 0 ? ' ours' : ''}" aria-label="${escapeText(`${name}, ${suite}: ${score.toFixed(2)}%`)}"><span class="variant-name">${escapeText(name)}</span><span class="ablation-track" aria-hidden="true"><span class="ablation-fill" style="width:${score}%"></span></span><span class="ablation-value">${score.toFixed(2)}</span></div>`;
-  }).join('')+'<div class="ablation-axis" aria-hidden="true"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>';
-  ablationChart.hidden = false;
-}
-ablationSelect.closest('label').hidden = false;
-ablationSelect.addEventListener('change', renderAblation);
-renderAblation();
 
 const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
 if ('IntersectionObserver' in window) {
@@ -202,19 +142,3 @@ if (typeof videoDialog.showModal === 'function') {
     document.documentElement.style.overflow = videoPreviousOverflow;
   });
 }
-
-// Keep the initial light poster clear; reveal native controls when playback starts.
-const heroPlayer = document.getElementById('demo-video');
-const heroPlay = document.querySelector('.hero-play');
-heroPlayer.controls = false;
-heroPlay.hidden = false;
-heroPlay.addEventListener('click', () => {
-  heroPlayer.controls = true;
-  heroPlay.hidden = true;
-  heroPlayer.focus();
-  heroPlayer.play().catch(() => { heroPlay.hidden = false; });
-});
-heroPlayer.addEventListener('play', () => {
-  heroPlayer.controls = true;
-  heroPlay.hidden = true;
-});
