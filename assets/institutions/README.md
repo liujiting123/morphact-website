@@ -8,3 +8,4 @@ Original institution marks, displayed without recoloring or redrawing.
 - NTU: [official website](https://www.ntu.edu.sg/), [original logo](https://www.ntu.edu.sg/media/images/default-source/default-album/ntu_logo.tmb-medium.webp?sfvrsn=5af29025_2).
 
 - NUS: complete university mark from the [SpeeD project page](https://bdemo.github.io/SpeeD/), [image](https://bdemo.github.io/SpeeD/figs/NUS.jpg); [official identity reference](https://www.nus.edu.sg/identity/guidelines/logo-guideline).
+- SZTU: complete blue university mark from the [official homepage](https://www.sztu.edu.cn/), [original SVG](https://www.sztu.edu.cn/images/logo.svg); full English name confirmed by the [official English website](https://english.sztu.edu.cn/).

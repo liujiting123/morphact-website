@@ -9,7 +9,7 @@ function pairedColumns(labels, model, benchmark) {
   const gains = labels.map((_,i)=>model.ours[i]-model.baseline[i]);
   const highlightIndex = gains.indexOf(Math.max(...gains));
   const description=labels.map((label,i)=>`${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%, gain ${signed(model.ours[i]-model.baseline[i])}`).join('. ');
-  let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 320" data-min="${min}" data-max="${max}" role="img" aria-label="${escapeText(model.text+'. Displayed y-axis range '+min+' to '+max+' percent. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text><text class="axis-range" x="364" y="45" text-anchor="end">${min}–${max}%</text>`;
+  let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 320" data-min="${min}" data-max="${max}" role="img" aria-label="${escapeText(model.text+'. Displayed y-axis range '+min+' to '+max+' percent. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text>`;
   svg+=`<rect x="${left+step*highlightIndex}" y="51" width="${step}" height="246" rx="3" class="suite-highlight"/>`;
   for(const tick of (min === 84 ? [84,88,92,96,100] : [15,30,45,60,75,90])) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
   if (min > 0) svg+=`<path class="axis-break" d="M ${left-5} ${bottom+6} l 8 -4 m -8 8 l 8 -4"/>`;
@@ -49,7 +49,7 @@ for(const container of document.querySelectorAll('[data-ablation-chart]')) {
   const y=value=>bottom-(value-min)/(max-min)*plotHeight;
   const names=ablationRows.map(row=>row.querySelector('th').childNodes[0].textContent.trim());
   const values=ablationRows.map(row=>Number(row.querySelectorAll('td')[index].textContent));
-  let svg=`<svg class="ablation-chart" viewBox="0 0 ${width} 331" data-min="${min}" data-max="${max}" role="img" aria-label="${escapeText('X-VLA LIBERO '+suite+'. Displayed y-axis range 30 to 100 percent. '+names.map((n,i)=>`${n}: ${values[i].toFixed(2)}%`).join('. '))}"><title>X-VLA LIBERO ${suite} ablation success rates</title><text class="axis-title" x="3" y="17">Success (%)</text><text class="axis-range" x="565" y="17" text-anchor="end">30–100%</text>`;
+  let svg=`<svg class="ablation-chart" viewBox="0 0 ${width} 331" data-min="${min}" data-max="${max}" role="img" aria-label="${escapeText('X-VLA LIBERO '+suite+'. Displayed y-axis range 30 to 100 percent. '+names.map((n,i)=>`${n}: ${values[i].toFixed(2)}%`).join('. '))}"><title>X-VLA LIBERO ${suite} ablation success rates</title><text class="axis-title" x="3" y="17">Success (%)</text>`;
   for(const tick of [30,40,50,60,70,80,90,100]) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*6}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+4}" text-anchor="end">${tick}</text>`;
   svg+=`<path class="axis-break" d="M ${left-5} ${bottom+6} l 8 -4 m -8 8 l 8 -4"/>`;
   names.forEach((name,i)=>{

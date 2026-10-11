@@ -13,8 +13,8 @@
   <meta property="og:image:alt" content="MorphAct generates context-dependent parameter updates through a shared adaptation rule.">
   <title>MorphAct: Contextual Parameterization of Vision–Language–Action Models</title>
   <link rel="icon" type="image/svg+xml" href="assets/morphact.svg">
-  <link rel="stylesheet" href="styles.css?v=14">
-  <script src="script.js?v=8" defer></script>
+  <link rel="stylesheet" href="styles.css?v=15">
+  <script src="script.js?v=9" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -29,34 +29,36 @@
       <p class="hero-lead">A general framework for contextual adaptation across VLA architectures.</p>
       <div class="paper-credits">
         <ul class="author-row" aria-label="Authors">
-          <li>Ziyan Liu<sup>2,*</sup></li>
-          <li>Jiting Liu<sup>1,*</sup></li>
-          <li>Weihong Zhong<sup>*</sup></li>
+          <li>Ziyan Liu<sup>*,1</sup></li>
+          <li>Jiting Liu<sup>*,2</sup></li>
+          <li>Weihong Zhong<sup>*,2</sup></li>
           <li>Wenda Yu<sup>5</sup></li>
-          <li>Yeqiu Chen<sup>2</sup></li>
+          <li>Yeqiu Chen<sup>1</sup></li>
         </ul>
         <ul class="author-row" aria-label="Authors">
           <li>Jason Li<sup>4</sup></li>
-          <li>Xiaojiang Peng</li>
-          <li>Shuyuan Hu<sup>1</sup></li>
+          <li>Xiaojiang Peng<sup>6</sup></li>
+          <li>Shuyuan Hu<sup>2</sup></li>
           <li>Kai Wang<sup>3,†</sup></li>
-          <li>Bo Zhao<sup>1,†</sup></li>
+          <li>Bo Zhao<sup>2,†</sup></li>
         </ul>
         <ul class="affiliations" aria-label="Author affiliations">
-          <li><sup>1</sup>Shanghai Jiao Tong University</li>
-          <li><sup>2</sup>University of Science and Technology of China</li>
+          <li><sup>1</sup>University of Science and Technology of China</li>
+          <li><sup>2</sup>Shanghai Jiao Tong University</li>
           <li><sup>3</sup>National University of Singapore</li>
           <li><sup>4</sup>Nanyang Technological University</li>
           <li><sup>5</sup>Tongji University</li>
+          <li><sup>6</sup>Shenzhen Technology University</li>
         </ul>
         <p class="author-notes"><span><sup>*</sup>Equal contribution</span><span><sup>†</sup>Corresponding authors</span></p>
       </div>
       <div class="institution-logos" aria-label="Participating institutions">
-        <a class="institution-logo institution-sjtu" href="https://www.sjtu.edu.cn/" target="_blank" rel="noopener" aria-label="Shanghai Jiao Tong University official website"><img src="assets/institutions/sjtu-logo.png" alt="Shanghai Jiao Tong University" decoding="async"></a>
         <a class="institution-logo institution-ustc" href="https://www.ustc.edu.cn/" target="_blank" rel="noopener" aria-label="University of Science and Technology of China official website"><img src="assets/institutions/ustc-logo.jpg" alt="University of Science and Technology of China" decoding="async"></a>
+        <a class="institution-logo institution-sjtu" href="https://www.sjtu.edu.cn/" target="_blank" rel="noopener" aria-label="Shanghai Jiao Tong University official website"><img src="assets/institutions/sjtu-logo.png" alt="Shanghai Jiao Tong University" decoding="async"></a>
         <a class="institution-logo institution-nus" href="https://www.nus.edu.sg/" target="_blank" rel="noopener" aria-label="National University of Singapore official website"><img src="assets/institutions/nus-logo.jpg" alt="National University of Singapore" decoding="async"></a>
         <a class="institution-logo institution-ntu" href="https://www.ntu.edu.sg/" target="_blank" rel="noopener" aria-label="Nanyang Technological University official website"><img src="assets/institutions/ntu-logo.webp" alt="Nanyang Technological University" decoding="async"></a>
         <a class="institution-logo institution-tongji" href="https://www.tongji.edu.cn/" target="_blank" rel="noopener" aria-label="Tongji University official website"><img src="assets/institutions/tongji-badge.png" alt="Tongji University" decoding="async"></a>
+        <a class="institution-logo institution-sztu" href="https://english.sztu.edu.cn/" target="_blank" rel="noopener" aria-label="Shenzhen Technology University official website"><img src="assets/institutions/sztu-logo.svg" alt="Shenzhen Technology University" decoding="async"></a>
       </div>
       <div class="resource-links" aria-label="Research resources">
         <!-- Replace each disabled button with an anchor only when its release URL is available. -->
@@ -184,7 +186,6 @@
         <p class="protocol">Twenty rollouts per task. Avg. gives equal weight to Easy (28 tasks), Medium (11), Hard (6), and Very Hard (5). MorphAct scores average three selected evaluations. Var. is the sample variance of their overall scores (pp²); baseline variance is unreported. Bold marks the best score within each backbone, including ties.</p>
       </details>
     </div>
-      <p class="chart-note">Success rate (%) ↑ · LIBERO shows the 84–100% range; Meta-World shows 15–90%. Dark badges identify the largest absolute gain for each evaluated model.</p>
     </section>
 
     <section id="ablations" class="section wrap" aria-labelledby="ablations-title">
@@ -194,7 +195,7 @@
         <figure class="ablation-chart-panel"><h3>Mean over all suites</h3><div data-ablation-chart="4"></div></figure>
         <figure class="ablation-chart-panel"><h3>Long-horizon tasks</h3><div data-ablation-chart="3"></div></figure>
       </div>
-      <p class="ablation-legend legend"><span class="ours-key">MorphAct</span><span class="baseline-key">Ablated variant</span></p><p class="ablation-scale-note">Success rate (%) · Both panels show the 30–100% range.</p>
+      <p class="ablation-legend legend"><span class="ours-key">MorphAct</span><span class="baseline-key">Ablated variant</span></p>
       <div class="ablation-findings"><article><div><h3>Context beyond task identity <b>+8.95%</b></h3><p>Mean success reaches 97.20% with current context, versus 88.25% for Task-ID and 87.50% for a constant condition.</p></div></article><article><div><h3>Adapt both modules</h3><p>Action-only reaches 81.00%; VLM-only, 43.50%. Adding upstream adaptation raises Action-only to 86.00%, even before coupling.</p></div></article><article><div><h3>Couple through adapted features <b>+11.20%</b></h3><p>Using adapted features to generate action updates raises mean success from 86.00% to 97.20%. On Long, the gain is <strong>+21.60%</strong>.</p></div></article></div>
       <details class="results-details"><summary>All ablation scores &amp; controlled changes <span aria-hidden="true">+</span></summary><p class="table-hint">Scroll to see every column ↔</p><div class="table-scroll" role="region" aria-label="Full X-VLA ablation results" tabindex="0"><table class="results-table ablation-table" data-benchmark="ablations">
             <caption>X-VLA ablations on LIBERO · success rate (%)</caption>
