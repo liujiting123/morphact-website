@@ -260,7 +260,7 @@ def main():
         with ThreadPoolExecutor(max_workers=2) as pool:
             list(pool.map(web_clip, enumerate(overview)))
         stitch(timeline)
-        frame(MAIN, '6', MAIN.with_suffix('.jpg'))
+        frame(MAIN, '0', MAIN.with_name(MAIN.stem + '-title.jpg'))
     verify(outputs, timeline)
 
 

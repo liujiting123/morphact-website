@@ -1,19 +1,27 @@
 // Plot the manuscript tables directly. Both benchmarks are always visible.
 const escapeText = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const signed = value => `${value > 0.005 ? '+' : value < -0.005 ? '−' : ''}${Math.abs(value).toFixed(2)}%`;
-function pairedColumns(labels, model) {
+function pairedColumns(labels, model, benchmark) {
   const width=380, left=36, bottom=273, top=61, plotHeight=bottom-top, step=82;
-  const y = value => bottom-value/100*plotHeight;
+  const min = benchmark === 'libero' ? 80 : 0;
+  const y = value => bottom-(value-min)/(100-min)*plotHeight;
+  const gains = labels.map((_,i)=>model.ours[i]-model.baseline[i]);
+  const highlightIndex = gains.indexOf(Math.max(...gains));
   const description=labels.map((label,i)=>`${label}: baseline ${model.baseline[i].toFixed(2)}%, MorphAct ${model.ours[i].toFixed(2)}%, gain ${signed(model.ours[i]-model.baseline[i])}`).join('. ');
-  let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 312" role="img" aria-label="${escapeText(model.text+'. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text>`;
-  svg+=`<rect x="${left+step*3}" y="51" width="${step}" height="246" rx="3" class="suite-highlight"/>`;
-  for(const tick of [0,25,50,75,100]) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
+  let svg=`<svg class="benchmark-chart" viewBox="0 0 ${width} 320" data-min="${min}" data-max="100" role="img" aria-label="${escapeText(model.text+'. Displayed y-axis range '+min+' to 100 percent. '+description)}"><title>${escapeText(model.text+' success rates')}</title><desc>${escapeText(description)}</desc><text class="axis-title" x="2" y="45">Success (%)</text><text class="axis-range" x="364" y="45" text-anchor="end">${min}–100%</text>`;
+  svg+=`<rect x="${left+step*highlightIndex}" y="51" width="${step}" height="246" rx="3" class="suite-highlight"/>`;
+  for(const tick of (min === 80 ? [80,85,90,95,100] : [0,25,50,75,100])) svg+=`<line class="chart-gridline" x1="${left}" x2="${left+step*4}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left-8}" y="${y(tick)+3}" text-anchor="end">${tick}</text>`;
+  if (min > 0) svg+=`<path class="axis-break" d="M ${left-5} ${bottom+6} l 8 -4 m -8 8 l 8 -4"/>`;
   labels.forEach((label,i)=>{
     const center=left+step*(i+.5), baselineX=center-29, oursX=center+4, barWidth=25;
     const gain=model.ours[i]-model.baseline[i], positive=gain>0.005, negative=gain < -0.005;
     const description=`${label}: ${model.baseline[i].toFixed(2)}% → ${model.ours[i].toFixed(2)}% (${signed(gain)})`;
-    svg+=`<g class="suite-group"><title>${escapeText(description)}</title><rect class="gain-bg${negative?' negative-bg':''}${!positive&&!negative?' neutral-bg':''}" x="${center-33}" y="9" width="66" height="23" rx="3"/><text class="gain-label${negative?' negative-label':''}${!positive&&!negative?' neutral-label':''}" x="${center}" y="25" text-anchor="middle">${signed(gain)}</text>`;
+    svg+=`<g class="suite-group"><title>${escapeText(description)}</title><rect class="gain-bg${i===highlightIndex?' largest-gain':''}${negative?' negative-bg':''}${!positive&&!negative?' neutral-bg':''}" x="${center-33}" y="9" width="66" height="23" rx="3"/><text class="gain-label${i===highlightIndex?' largest-gain':''}${negative?' negative-label':''}${!positive&&!negative?' neutral-label':''}" x="${center}" y="25" text-anchor="middle">${signed(gain)}</text>`;
     svg+=`<rect class="bar-baseline" data-value="${model.baseline[i]}" x="${baselineX}" y="${y(model.baseline[i])}" width="${barWidth}" height="${bottom-y(model.baseline[i])}" rx="1"/><rect class="bar-ours" data-value="${model.ours[i]}" x="${oursX}" y="${y(model.ours[i])}" width="${barWidth}" height="${bottom-y(model.ours[i])}" rx="1"/>`;
+    if (Math.abs(gain) > 0.005) {
+      const end=y(model.ours[i]), start=y(model.baseline[i]), direction=positive?1:-1;
+      svg+=`<path class="change-link${negative?' negative-link':''}" d="M ${center} ${start} V ${end} M ${center-2.5} ${end+direction*4} L ${center} ${end} L ${center+2.5} ${end+direction*4}"/>`;
+    }
     svg+=`<text class="bar-value baseline-value" x="${baselineX+barWidth/2}" y="${y(model.baseline[i])-7}" text-anchor="middle">${model.baseline[i].toFixed(2)}</text><text class="bar-value ours-value" x="${oursX+barWidth/2}" y="${y(model.ours[i])-7}" text-anchor="middle">${model.ours[i].toFixed(2)}</text>`;
     if(label==='Very Hard') svg+=`<text class="suite-label" x="${center}" y="292" text-anchor="middle"><tspan x="${center}">Very Hard</tspan></text>`;
     else svg+=`<text class="suite-label" x="${center}" y="292" text-anchor="middle">${escapeText(label)}</text>`;
@@ -28,7 +36,7 @@ for(const table of document.querySelectorAll('.results-table:not(.ablation-table
     const [base,ours]=group.rows;
     const scores=row=>[...row.querySelectorAll('.suite-cell,.mean-cell')].map(c=>Number(c.textContent.trim()));
     const model={name:base.querySelector('.backbone-cell').innerHTML,text:base.querySelector('.backbone-cell').textContent,baseline:scores(base),ours:scores(ours)};
-    return `<figure class="backbone-chart"><h4>${model.name}</h4><p class="backbone-summary"><span>${model.baseline[4].toFixed(2)}</span><span class="score-arrow" aria-hidden="true">→</span><strong>${model.ours[4].toFixed(2)}%</strong><b>${signed(model.ours[4]-model.baseline[4])}</b></p><p class="mean-label">Overall success</p>${pairedColumns(labels,model)}</figure>`;
+    return `<figure class="backbone-chart"><h4>${model.name}</h4><p class="backbone-summary"><span>${model.baseline[4].toFixed(2)}</span><span class="score-arrow" aria-hidden="true">→</span><strong>${model.ours[4].toFixed(2)}%</strong><b>${signed(model.ours[4]-model.baseline[4])}</b></p><p class="mean-label">Overall success</p>${pairedColumns(labels,model,table.dataset.benchmark)}</figure>`;
   }).join('');
   container.hidden=false;
 }
@@ -67,15 +75,11 @@ if (typeof figureDialog.showModal === 'function') {
   const canvas = figureDialog.querySelector('.dialog-canvas');
   const image = canvas.querySelector('img');
   const title = figureDialog.querySelector('#figure-dialog-title');
-  const zoomButton = figureDialog.querySelector('[data-zoom]');
-  const originalLink = figureDialog.querySelector('[data-original]');
   let previousOverflow = '';
 
   function setZoom(zoomed) {
     canvas.classList.toggle('is-zoomed', zoomed);
     image.style.setProperty('--zoom-width', `${Math.min(image.naturalWidth, Math.max(canvas.clientWidth * 2, 1200))}px`);
-    zoomButton.setAttribute('aria-pressed', String(zoomed));
-    zoomButton.setAttribute('aria-label', zoomed ? 'Fit figure to window' : 'Zoom in');
     if (!zoomed) canvas.scrollTo(0, 0);
   }
 
@@ -87,14 +91,12 @@ if (typeof figureDialog.showModal === 'function') {
       image.src = link.href;
       image.alt = link.querySelector('img').alt;
       title.textContent = link.dataset.figureTitle;
-      originalLink.href = link.href;
       previousOverflow = document.documentElement.style.overflow;
       document.documentElement.style.overflow = 'hidden';
       figureDialog.showModal();
       setZoom(false);
     });
   }
-  zoomButton.addEventListener('click', () => setZoom(!canvas.classList.contains('is-zoomed')));
   image.addEventListener('click', () => setZoom(!canvas.classList.contains('is-zoomed')));
   figureDialog.querySelector('[data-close]').addEventListener('click', () => figureDialog.close());
   figureDialog.addEventListener('click', (event) => {

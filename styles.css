@@ -6,7 +6,7 @@
   --green: #356b58;
   --green-dark: #244e3e;
   --purple: #8b77a2;
-  --baseline: #bfb1cd;
+  --baseline: #c4b8d2;
   --line: #dfe3dc;
   --width: 1160px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -73,16 +73,9 @@ h2 { font-size: 33px; line-height: 1.25; font-weight: 550; letter-spacing: -.75p
 .paper-figure { min-width: 0; }
 .figure-link { position: relative; display: block; padding: 12px; background: white; border: 1px solid var(--line); border-radius: 3px; cursor: zoom-in; }
 .figure-link img { width: 100%; }
-.figure-expand { position: absolute; top: 6px; right: 10px; color: var(--green); font-size: 17px; }
 .paper-figure figcaption { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-top: 9px; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .figure-note { display: block; font-size: 11px; }
-.figure-source { flex-shrink: 0; color: var(--green); font-size: 11px; white-space: nowrap; }
-.figure-source:hover, .back-to-top:hover { text-decoration: underline; text-underline-offset: 3px; }
-.method-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 29px; margin-block: 24px; }
-.method-steps article > span { font-size: 10px; color: var(--green); letter-spacing: 1px; text-transform: uppercase; }
-.method-steps h3 { font-size: 16px; font-weight: 600; margin-block: 5px 6px; line-height: 1.5; }
-.method-steps p { font-size: 13px; line-height: 1.7; color: var(--muted); }
-.equation-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding-block: 14px 18px; border-top: 1px solid var(--line); }
+.back-to-top:hover { text-decoration: underline; text-underline-offset: 3px; }
 .equation-note { min-width: 0; }
 .equation { max-width: 100%; overflow-x: auto; padding-block: 5px; }
 .equation math { font-family: math; font-size: 23px; }
@@ -100,7 +93,7 @@ h2 { font-size: 33px; line-height: 1.25; font-weight: 550; letter-spacing: -.75p
 .legend { display: flex; justify-content: center; gap: 19px; color: #556152; font-size: 12px; }
 .legend span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
 .legend span::before { content: ""; width: 12px; height: 12px; background: var(--baseline); border-radius: 1px; }
-.legend .ours-key::before { background: var(--green); }
+.legend .ours-key::before { background: #215d43; }
 .benchmark-charts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; padding-top: 22px; }
 .backbone-chart { min-width: 0; text-align: center; }
 .backbone-chart h4 { font-size: 18px; font-weight: 650; }
@@ -114,8 +107,8 @@ h2 { font-size: 33px; line-height: 1.25; font-weight: 550; letter-spacing: -.75p
 .axis-title { fill: #65725f; font-size: 10px; }
 .tick-label { fill: #65725f; font-size: 10px; }
 .suite-highlight { fill: #f4f6ee; }
-.bar-baseline { fill: var(--baseline); }
-.bar-ours { fill: var(--green); }
+.bar-baseline { fill: var(--baseline); stroke: #a99ab8; stroke-width: .6; }
+.bar-ours { fill: #215d43; }
 .bar-value { font-size: 11px; fill: #786688; font-variant-numeric: tabular-nums; }
 .ours-value { fill: var(--green-dark); font-weight: 650; }
 .gain-bg { fill: #eaf1e6; }
@@ -173,7 +166,6 @@ h2 { font-size: 33px; line-height: 1.25; font-weight: 550; letter-spacing: -.75p
 .task-card { min-width: 0; }
 .task-image { position: relative; display: block; cursor: zoom-in; }
 .task-image img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; border-radius: 3px; }
-.task-image .figure-expand { width: 23px; height: 23px; background: rgb(255 255 255 / 90%); border-radius: 50%; text-align: center; top: 7px; right: 7px; font-size: 14px; }
 .task-body { padding: 13px 2px 0; }
 .task-index { display: flex; justify-content: space-between; font-size: 10px; color: #7a8775; }
 .task-index span { color: var(--green); font-size: 13px; font-weight: 600; }
@@ -250,8 +242,6 @@ h2 { font-size: 33px; line-height: 1.25; font-weight: 550; letter-spacing: -.75p
   .ablation-charts { grid-template-columns: 1fr; gap: 22px; max-width: 600px; margin-inline: auto; }
   .ablation-findings { grid-template-columns: 1fr; gap: 20px; }
   .ablation-findings h3 b { display: inline; margin-left: 10px; font-size: 17px; }
-  .method-steps { grid-template-columns: 1fr; gap: 18px; }
-  .equation-pair { grid-template-columns: 1fr; gap: 18px; }
   .diagnostic-grid { grid-template-columns: 1fr; gap: 23px; }
   .task-gallery { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 23px 20px; }
   .task-description { min-height: 62px; }
@@ -289,10 +279,8 @@ h2 { font-size: 33px; line-height: 1.25; font-weight: 550; letter-spacing: -.75p
   .section-heading { margin-bottom: 22px; }
   .section-intro { font-size: 14px; line-height: 1.8; margin-top: 15px; }
   .figure-link { padding: 6px; }
-  .figure-expand { font-size: 13px; top: 3px; right: 6px; }
   .paper-figure figcaption { display: block; font-size: 10px; }
   .figure-note { font-size: 10px; }
-  .figure-source { display: inline-block; font-size: 10px; margin-top: 5px; }
   .equation math { font-size: 22px; }
   .detail-content .equation math { font-size: 18px; }
   .benchmark-panel { padding: 17px 8px 0; }
@@ -332,3 +320,39 @@ h2 { font-size: 33px; line-height: 1.25; font-weight: 550; letter-spacing: -.75p
   .video-dialog-caption { padding: 11px; font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.axis-range { fill: #60725a; font-size: 11px; }
+.axis-break { fill: none; stroke: #65725f; stroke-width: 1.3; }
+.change-link { stroke: #215d43; fill: none; stroke-width: 1.15; }
+.negative-link { stroke: #976955; }
+.gain-bg.largest-gain { fill: #215d43; }
+.gain-label.largest-gain { fill: #fff; font-weight: 700; }
+
+.policy-equation { max-width: 840px; margin: 0 auto 23px; padding: 11px 20px; border-left: 2px solid #a4b49d; background: #eef2e9; }
+.math-derivation { margin-block: 22px; }
+.math-derivation h3, .diagnostic-math h3 { font-size: 17px; font-weight: 600; line-height: 1.5; margin-bottom: 12px; }
+.math-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 17px 30px; }
+.math-grid > div { min-width: 0; }
+.math-grid .equation math { font-size: 21px; }
+.math-caption { color: #63715e; font-size: 12px; line-height: 1.75; margin-top: 9px; }
+.low-rank-equation { display: grid; grid-template-columns: 1fr 1.35fr; gap: 25px; align-items: center; padding-block: 15px; margin-top: 18px; border-block: 1px solid var(--line); }
+.low-rank-equation p { margin: 0; font-size: 12px; }
+.coupling-math { padding-top: 20px; }
+.math-intro { font-size: 14px; color: #53634e; line-height: 1.75; }
+.coupling-main { margin-block: 14px 10px; }
+.coupling-main math { font-size: 24px; }
+.route-equations { max-width: 830px; margin-inline: auto; }
+.route-label { font-size: 11px; color: var(--green); text-align: center; margin-top: 4px; }
+.diagnostic-math { margin-bottom: 23px; padding-block: 17px; border-block: 1px solid var(--line); }
+@media (max-width: 760px) {
+  .math-grid { grid-template-columns: 1fr; gap: 19px; }
+  .low-rank-equation { grid-template-columns: 1fr; gap: 8px; }
+  .math-derivation h3, .diagnostic-math h3 { font-size: 16px; }
+}
+@media (max-width: 520px) {
+  .policy-equation { padding: 9px 12px; }
+  .math-grid .equation math { font-size: 20px; }
+  .coupling-main math { font-size: 22px; }
+  .math-caption { font-size: 11px; }
+  .math-intro { font-size: 13px; }
+}
