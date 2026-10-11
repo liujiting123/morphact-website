@@ -53,6 +53,10 @@ strong { font-weight: 650; }
 .affiliations { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 22px; max-width: 900px; padding: 0; margin: 15px auto 0; list-style: none; font-size: 14px; line-height: 1.6; color: #535f56; }
 .affiliations li { white-space: nowrap; }
 .author-notes { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 25px; color: var(--muted); font-size: 12px; margin-top: 9px; }
+.author-emails { display: grid; gap: 2px; margin-top: 12px; color: var(--green-dark); font-size: clamp(11px, 3vw, 13px); line-height: 1.8; }
+.author-emails p { display: flex; justify-content: center; gap: clamp(12px, 3vw, 24px); }
+.author-emails a { white-space: nowrap; }
+.author-emails a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .institution-logos { display: flex; align-items: center; justify-content: center; gap: 36px; margin-top: 23px; }
 .institution-logo { display: flex; align-items: center; justify-content: center; width: 65px; height: 56px; }
 .institution-logo img { width: auto; height: 55px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
